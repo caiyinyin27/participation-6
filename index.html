@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TSOI Yan Yan – Portfolio</title>
 
-    <!-- Global CSS & D3 -->
+    <!-- Fonts & Global CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
     <script src="https://d3js.org/d3.v7.min.js"></script>
 
@@ -15,613 +18,528 @@
 
     <style>
         /* ---------- Travel Map ---------- */
-        #travel-map {position:relative;margin:3rem 0;}
-        #map {height:70vh;width:100%;border:2px solid #0ff;border-radius:12px;}
-        .legend{
-            position:absolute;bottom:20px;right:20px;background:rgba(0,0,0,.85);
-            padding:14px 18px;border:1px solid #0ff;border-radius:10px;z-index:1000;
-            box-shadow:0 0 20px rgba(0,255,255,.6);font-size:15px;backdrop-filter:blur(5px);
-            min-width:180px;color:#0ff;font-family:'Courier New',monospace;
+        #travel-map { position: relative; margin: 4rem 0; }
+        #map { height: 70vh; width: 100%; border-radius: 24px; border: 1px solid rgba(0,209,255,.6); box-shadow: 0 0 60px rgba(0,209,255,.25); }
+        .legend {
+            position: absolute; bottom: 20px; right: 20px; background: rgba(0, 0, 0, 0.65);
+            padding: 1rem 1.5rem; border: 1px solid rgba(0,209,255,.7); border-radius: 16px; z-index: 1000;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.45); backdrop-filter: blur(16px); color: #00d1ff;
         }
-        .legend h4{margin:0 0 12px;color:#0ff;text-shadow:0 0 6px #0ff;text-align:center;}
-        .legend-item{display:flex;align-items:center;margin:8px 0;font-weight:500;}
-        .legend-dot{
-            width:14px;height:14px;border-radius:50%;margin-right:12px;
-            border:1.5px solid #000;animation:pulse 2.5s infinite;
+        .legend h4 { margin: 0 0 12px; text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.85rem; }
+        .legend-item { display: flex; align-items: center; gap: 10px; margin-top: 6px; font-size: 0.9rem; }
+        .legend-dot {
+            width: 16px; height: 16px; border-radius: 50%; border: 1px solid #0e0e0e;
+            animation: pulse 2.5s ease-in-out infinite;
         }
-        .legend-dot.purple{background:#FF00FF;box-shadow:0 0 10px #FF00FF;}
-        .legend-dot.blue  {background:#00FFFF;box-shadow:0 0 10px #00FFFF;}
-        .legend-dot.red   {background:#FF0000;box-shadow:0 0 10px #FF0000;}
-        @keyframes pulse{0%,100%{box-shadow:0 0 10px currentColor;}50%{box-shadow:0 0 22px currentColor;}}
-        .custom-tooltip{
-            background:rgba(0,0,0,.9)!important;border:1.5px solid #0ff!important;
-            color:#0ff!important;font-family:'Courier New',monospace;padding:6px 10px!important;
-            border-radius:6px!important;box-shadow:0 0 15px #0ff!important;font-size:14px!important;
-            font-weight:bold;text-shadow:0 0 5px #0ff;backdrop-filter:blur(3px);
+        .legend-dot.purple { background: #ba68ff; box-shadow: 0 0 10px #ba68ff; }
+        .legend-dot.blue { background: #00d1ff; box-shadow: 0 0 10px #00d1ff; }
+        .legend-dot.red { background: #ff5c77; box-shadow: 0 0 10px #ff5c77; }
+        @keyframes pulse { 0%, 100% { box-shadow: 0 0 10px currentColor; } 50% { box-shadow: 0 0 26px currentColor; } }
+        .custom-tooltip {
+            background: rgba(0, 0, 0, 0.85) !important; border: 1px solid rgba(0,209,255,.8) !important;
+            color: #00d1ff !important; padding: 6px 12px !important; border-radius: 10px !important;
+            font-weight: 600; font-size: 0.85rem !important; letter-spacing: 0.02em; text-transform: uppercase;
         }
-        .leaflet-tooltip-pane .leaflet-tooltip::before{border:none!important;}
-        .leaflet-container{cursor:crosshair;}
+        .leaflet-container { cursor: crosshair; }
 
         /* ---------- Pie Chart ---------- */
-        #pie-section{text-align:center;margin:3rem 0;}
-        #pie-chart{margin:1rem auto;}
-        #pie-legend{
-            display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:1rem;
-            font-size:14px;
+        #pie-section { text-align: center; margin: 4rem 0; }
+        #pie-chart { margin: 0 auto; }
+        #pie-legend {
+            display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 1.25rem;
+            font-size: 0.9rem; letter-spacing: 0.05em;
         }
-        #pie-legend .legend-item{
-            display:flex;align-items:center;
-        }
-        #pie-legend .color{
-            width:16px;height:16px;border-radius:50%;margin-right:6px;
-        }
+        #pie-legend .legend-item { display: flex; align-items: center; gap: 0.5rem; }
+        #pie-legend .color { width: 16px; height: 16px; border-radius: 50%; box-shadow: 0 0 12px rgba(0,209,255,.4); }
 
         /* ---------- Learning Experience Diagram ---------- */
-        #learning-experience {
-            margin: 4rem 0;
-            text-align: center;
-            padding: 2rem;
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            border-radius: 16px;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
-            overflow: hidden;
-        }
-        #learning-experience h2 {
-            color: #0ff;
-            text-shadow: 0 0 10px #0ff;
-            font-family: 'Courier New', monospace;
-            margin-bottom: 1.5rem;
-        }
-        #learning-svg {
-            background: white;
-            border: 1px solid #ccc;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            max-width: 100%;
-            height: auto;
-        }
+        #learning-experience { margin: 4rem 0; }
+        #learning-svg { border-radius: 18px; box-shadow: 0 40px 80px rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.08); background: rgba(245,245,245,0.02); }
         .learning-tooltip {
-            position: absolute;
-            background-color: #333;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 12px;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s;
-            max-width: 200px;
-            text-align: center;
-            z-index: 1000;
-            font-family: Arial, sans-serif;
+            position: absolute; background: rgba(0,0,0,0.9); color: #00d1ff; padding: 10px 16px; border-radius: 12px;
+            font-size: 0.9rem; letter-spacing: 0.04em; pointer-events: none; opacity: 0; transition: opacity 0.2s;
+            box-shadow: 0 0 30px rgba(0,209,255,0.4); border: 1px solid rgba(0,209,255,.8);
         }
 
-        /* ---------- Adjacency Matrix ---------- */
-        #learning-matrix {
-            margin: 4rem 0;
-            padding: 2rem;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            border-radius: 16px;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
-            color: #0ff;
-            font-family: 'Courier New', monospace;
-            overflow: hidden;
-        }
-        #learning-matrix h2 {
-            text-align: center;
-            color: #0ff;
-            text-shadow: 0 0 10px #0ff;
-            margin-bottom: 1.5rem;
-        }
-        .matrix-container {
-            overflow-x: auto;
-            border-radius: 12px;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-        }
-        #matrix-table {
-            border-collapse: collapse;
-            background: #111;
-            font-size: 12px;
-            min-width: 600px;
-        }
-        #matrix-table th, #matrix-table td {
-            border: 1px solid #0ff;
-            padding: 10px;
-            text-align: center;
-            min-width: 60px;
-        }
-        #matrix-table th {
-            background: rgba(0, 255, 255, 0.1);
-            font-weight: bold;
-            color: #0ff;
-            text-shadow: 0 0 5px #0ff;
-        }
-        #matrix-table td {
-            color: #fff;
-            font-weight: bold;
-        }
-        .main-node { font-weight: bold; }
-        .elementary { background: #FF6F61 !important; color: white; }
-        .middle { background: #6B7280 !important; color: white; }
-        .high { background: #10B981 !important; color: white; }
-        .college { background: #3B82F6 !important; color: white; }
-        .branch-node { background: #FBBF24 !important; color: #333; }
-        .connected {
-            background: #00ff88 !important;
-            color: #000;
-            animation: pulse-glow 2s infinite;
-        }
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 5px #0f0; }
-            50% { box-shadow: 0 0 15px #0f0; }
-        }
-        .matrix-legend {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            justify-content: center;
-            margin-top: 1rem;
-            font-size: 13px;
-        }
-        .matrix-legend-item {
-            display: flex;
-            align-items: center;
-            background: rgba(0, 255, 255, 0.1);
-            padding: 6px 10px;
-            border-radius: 8px;
-            border: 1px solid #0ff;
-        }
-        .legend-circle {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 8px;
-            border: 1.5px solid #000;
-        }
+        /* ---------- Learning Experience Adjacency Matrix ---------- */
+        #learning-matrix { margin: 4rem 0; }
+        .matrix-container { overflow-x: auto; border-radius: 18px; box-shadow: 0 30px 70px rgba(0,0,0,0.65); border: 1px solid rgba(255,255,255,0.05); }
+        #matrix-table { border-collapse: collapse; width: 100%; min-width: 600px; font-size: 0.85rem; }
+        #matrix-table th, #matrix-table td { border: 1px solid rgba(255,255,255,0.08); padding: 0.9rem; text-align: center; color: #f5f5f5; }
+        #matrix-table th { background: rgba(0,0,0,0.45); text-transform: uppercase; letter-spacing: 0.08em; }
+        #matrix-table td { background: rgba(0,0,0,0.25); }
+        #matrix-table td.connected { background: rgba(0,209,255,0.18); color: #00d1ff; font-weight: 600; box-shadow: inset 0 0 15px rgba(0,209,255,0.4); }
+        .matrix-legend { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 1.5rem; }
+        .matrix-legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; letter-spacing: 0.05em; }
+        .legend-circle { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.4); }
         .matrix-tooltip {
-            position: absolute;
-            background: rgba(0, 0, 0, 0.9);
-            color: #0ff;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 13px;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s;
-            z-index: 1000;
-            font-weight: bold;
-            text-shadow: 0 0 5px #0ff;
-            backdrop-filter: blur(4px);
-            border: 1px solid #0ff;
+            position: absolute; background: rgba(0,0,0,0.9); color: #00d1ff; padding: 8px 14px; border-radius: 10px;
+            pointer-events: none; opacity: 0; transition: opacity 0.2s; border: 1px solid rgba(0,209,255,0.6);
         }
-
-        .main-node, .branch-node, .elementary, .middle, .high, .college { stroke: #333; stroke-width: 2px; }
-        .elementary { fill: #FF6F61; }
-        .middle { fill: #6B7280; }
-        .high { fill: #10B981; }
-        .college { fill: #3B82F6; }
-        .branch-node { fill: #FBBF24; stroke: #333; stroke-width: 1px; }
-        .node-label { font-size: 12px; fill: #333; text-anchor: middle; dominant-baseline: middle; }
-        .link { stroke: #666; stroke-width: 2px; fill: none; }
-        .branch-link { stroke: #999; stroke-width: 1px; fill: none; }
-        .arrowhead { fill: #666; }
-        .legend-text { font-size: 12px; fill: #333; }
-        .legend-node { stroke: #333; stroke-width: 1px; }
     </style>
 </head>
 <body>
+    <header class="hero">
+        <nav class="nav">
+            <p class="brand">TSOI Yan Yan</p>
+            <div class="nav-links">
+                <a href="#portfolio-grid">Portfolio</a>
+                <a href="#data-visuals">Data Stories</a>
+                <a href="#travel-map">Journeys</a>
+            </div>
+            <button id="cv" class="ghost-btn">CV</button>
+        </nav>
 
-<!-- ==================== NAV ==================== -->
-<header>
-    <nav id="nav">
-        <ul>
-            <li><p>TSOI Yan Yan</p></li>
-            <li><a class="subpage" href="#grid-container">About me</a></li>
-            <li><a class="subpage" href="mywork.html">My work ></a></li>
-            <li><a class="subpage" href="grid cartogram.html">streaming media ></a></li>
-            <li><button id="cv" class="subpage">CV</button></li>
-        </ul>
-    </nav>
-
-    <section class="flex-container">
-        <img src="2.jpeg" alt="Portrait">
-        <div class="text-container">
-            <h1>Welcome to my website!!!</h1>
-            <p>I am a student.
-                <a class="intro_button" href="https://medium.com/@caiyinyin27/topic-the-art-of-danh-vo-939483904a28/" target="_blank">
-                    Follow me on Medium >
-                </a>
-            </p>
+        <div class="hero-grid">
+            <div class="hero-copy">
+                <p class="eyebrow">Creative Media BA • Cinematic technologist</p>
+                <h1>Tech-inspired storytelling with cinematic polish.</h1>
+                <p class="lede">I craft films, interactive experiences, and data visualizations that feel futuristic yet deeply human. Based in Hong Kong, collaborating globally.</p>
+                <div class="hero-cta">
+                    <a class="btn primary" href="mywork.html">View selected work</a>
+                    <a class="btn secondary" href="https://medium.com/@caiyinyin27/topic-the-art-of-danh-vo-939483904a28/" target="_blank" rel="noreferrer">Follow on Medium</a>
+                </div>
+                <ul class="hero-meta">
+                    <li><span>8+</span> short films</li>
+                    <li><span>12</span> interactive studies</li>
+                    <li><span>5</span> countries filmed</li>
+                </ul>
+            </div>
+            <div class="hero-media">
+                <video class="hero-video" autoplay muted loop playsinline poster="2.jpeg">
+                    <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
+                </video>
+                <div class="video-caption">Scene study • 2024 reel</div>
+            </div>
         </div>
-    </section>
-</header>
+    </header>
 
-<!-- ==================== MAIN ==================== -->
-<div id="main">
-    <p>I'm a Creative Media BA student at City University of Hong Kong. Excited to connect with like-minded people! I'm really passionate about indie filmmaking, interactive storytelling, and the intersection of technology and art. I'm always looking for new perspectives and potential collaborators for fun projects. Don't hesitate to say hi — let's grab a coffee or chat about cool ideas!</p>
-</div>
+    <main>
+        <section class="glass-panel about">
+            <div>
+                <p class="eyebrow">About</p>
+                <h2>Hong Kong based creative technologist</h2>
+                <p>I’m a Creative Media BA student at City University of Hong Kong exploring the edges of narrative, design, and code. I blend neon-lit cinematography with interactive systems to produce immersive worlds, speculative interfaces, and poetic data. Let’s collaborate on your next cinematic experiment.</p>
+            </div>
+            <div class="stat-grid">
+                <article>
+                    <h3>Focus</h3>
+                    <p>Indie filmmaking, interactive storytelling, and the intersection of design & computation.</p>
+                </article>
+                <article>
+                    <h3>Currently</h3>
+                    <p>Building immersive research on travel memories, motion graphics, and data-driven essays.</p>
+                </article>
+                <article>
+                    <h3>Collaborations</h3>
+                    <p>Open to film crews, creative technologists, and brands seeking bold visual narratives.</p>
+                </article>
+            </div>
+        </section>
 
-<div class="box">
-    <div>One</div><div>Two</div><div>Three<br>first line<br>second line</div>
-</div>
+        <section id="portfolio-grid" class="glass-panel">
+            <div class="section-heading">
+                <p class="eyebrow">Portfolio</p>
+                <h2>Neon-grade experiences</h2>
+                <p>Selected prototypes, essays, and maps exploring cinematic storytelling and interactive media.</p>
+            </div>
+            <div class="portfolio-grid">
+                <a class="portfolio-card" href="mywork.html">
+                    <p class="tag">Film</p>
+                    <h3>My Work</h3>
+                    <p>Short films, concept reels, and cinematic experiments.</p>
+                </a>
+                <a class="portfolio-card" href="grid cartogram.html">
+                    <p class="tag">Interactive</p>
+                    <h3>Streaming Media Cartogram</h3>
+                    <p>Grid-based data visualization exploring media habits.</p>
+                </a>
+                <a class="portfolio-card" href="MyTravelMap.html">
+                    <p class="tag">Map</p>
+                    <h3>Immersive Travel Map</h3>
+                    <p>Leaflet-powered narrative map with neon cues.</p>
+                </a>
+                <a class="portfolio-card" href="TSOIYANYAN's Learning Experience at Different Stages.html">
+                    <p class="tag">Data Story</p>
+                    <h3>Learning Experience</h3>
+                    <p>Journey through education via animated charts.</p>
+                </a>
+            </div>
+        </section>
 
-<section id="grid-container">
-    <div class="grid-item1">1</div>
-    <div class="grid-item2">2</div>
-    <div class="grid-item3">3</div>
-</section>
+        <section id="data-visuals" class="data-stack">
+            <article id="vis-scatterplot" class="glass-panel data-card">
+                <div class="section-heading">
+                    <p class="eyebrow">Scatterplot</p>
+                    <h2>Hobbies over the years</h2>
+                </div>
+                <div id="hobbies-scatterplot"></div>
+            </article>
 
-<!-- ==================== HOBBIES SCATTERPLOT ==================== -->
-<section id="vis-scatterplot">
-    <h2>Hobbies Over the Years</h2>
-    <div id="hobbies-scatterplot"></div>
-</section>
+            <article id="pie-section" class="glass-panel data-card">
+                <div class="section-heading">
+                    <p class="eyebrow">Pie Chart</p>
+                    <h2>Favorite flavors</h2>
+                </div>
+                <svg id="pie-chart" width="500" height="500"></svg>
+                <div id="pie-legend"></div>
+            </article>
 
-<!-- ==================== FAVORITE FOODS PIE CHART ==================== -->
-<section id="pie-section">
-    <h1>Favorite Foods Pie Chart</h1>
-    <svg id="pie-chart" width="500" height="500"></svg>
-    <div id="pie-legend"></div>
-</section>
+            <article id="vis-personalData" class="glass-panel data-card">
+                <div class="section-heading">
+                    <p class="eyebrow">Tree</p>
+                    <h2>Education & Skills</h2>
+                </div>
+            </article>
+        </section>
 
-<!-- ==================== PERSONAL DATA TREE ==================== -->
-<section id="vis-personalData">
-    <h2>Education & Skills</h2>
-</section>
+        <section id="travel-map" class="glass-panel">
+            <div class="section-heading">
+                <p class="eyebrow">Travel</p>
+                <h2>My journey: places I’ve visited</h2>
+            </div>
+            <div id="map"></div>
+            <div class="legend">
+                <h4>Travel Type</h4>
+                <div class="legend-item"><div class="legend-dot purple"></div><span>Attended / Lived</span></div>
+                <div class="legend-item"><div class="legend-dot blue"></div><span>Family Travel</span></div>
+                <div class="legend-item"><div class="legend-dot red"></div><span>Personal Adventure</span></div>
+            </div>
+        </section>
 
-<!-- ==================== TRAVEL MAP ==================== -->
-<section id="travel-map">
-    <h2 style="text-align:center;color:#0ff;text-shadow:0 0 8px #0ff;margin:2rem 0;font-family:'Courier New',monospace;">
-        My Journey: Places I've Visited
-    </h2>
-    <div id="map"></div>
+        <section id="learning-experience" class="glass-panel">
+            <div class="section-heading">
+                <p class="eyebrow">Diagram</p>
+                <h2>Learning experience timeline</h2>
+            </div>
+            <svg id="learning-svg" width="900" height="700" viewBox="0 0 900 700" preserveAspectRatio="xMidYMid meet">
+                <text class="title" x="450" y="40" style="font-size:20px;font-weight:bold;fill:#f5f5f5;text-anchor:middle;">TSOI Yan Yan's Learning Experience</text>
+                <circle class="main-node elementary" cx="400" cy="100" r="30" data-label="Elementary School"></circle>
+                <circle class="main-node middle" cx="400" cy="250" r="30" data-label="Middle School"></circle>
+                <circle class="main-node high" cx="400" cy="400" r="30" data-label="High School"></circle>
+                <circle class="main-node college" cx="400" cy="550" r="30" data-label="College"></circle>
+                <circle class="branch-node" cx="300" cy="80" r="15" data-label="Children's Painting"></circle>
+                <circle class="branch-node" cx="300" cy="120" r="15" data-label="Dancing"></circle>
+                <circle class="branch-node" cx="500" cy="100" r="15" data-label="Singing"></circle>
+                <circle class="branch-node" cx="300" cy="230" r="15" data-label="Latin Dance"></circle>
+                <circle class="branch-node" cx="300" cy="270" r="15" data-label="Sketching"></circle>
+                <circle class="branch-node" cx="500" cy="250" r="15" data-label="Watercolor"></circle>
+                <circle class="branch-node" cx="300" cy="380" r="15" data-label="Micro-Film"></circle>
+                <circle class="branch-node" cx="300" cy="420" r="15" data-label="Sculpture"></circle>
+                <circle class="branch-node" cx="500" cy="400" r="15" data-label="Photography"></circle>
+                <circle class="branch-node" cx="300" cy="510" r="15" data-label="Music"></circle>
+                <circle class="branch-node" cx="300" cy="550" r="15" data-label="Programming"></circle>
+                <circle class="branch-node" cx="300" cy="590" r="15" data-label="Computers"></circle>
+                <circle class="branch-node" cx="500" cy="530" r="15" data-label="Documentaries"></circle>
+                <circle class="branch-node" cx="500" cy="570" r="15" data-label="Micro-Films"></circle>
+                <text class="node-label" x="400" y="100">Elementary</text>
+                <text class="node-label" x="400" y="250">Middle</text>
+                <text class="node-label" x="400" y="400">High</text>
+                <text class="node-label" x="400" y="550">College</text>
+                <text class="node-label" x="300" y="80" style="font-size:10px">Painting</text>
+                <text class="node-label" x="300" y="120" style="font-size:10px">Dancing</text>
+                <text class="node-label" x="500" y="100" style="font-size:10px">Singing</text>
+                <text class="node-label" x="300" y="230" style="font-size:10px">Latin Dance</text>
+                <text class="node-label" x="300" y="270" style="font-size:10px">Sketching</text>
+                <text class="node-label" x="500" y="250" style="font-size:10px">Watercolor</text>
+                <text class="node-label" x="300" y="380" style="font-size:10px">Micro-Film</text>
+                <text class="node-label" x="300" y="420" style="font-size:10px">Sculpture</text>
+                <text class="node-label" x="500" y="400" style="font-size:10px">Photography</text>
+                <text class="node-label" x="300" y="510" style="font-size:10px">Music</text>
+                <text class="node-label" x="300" y="550" style="font-size:10px">Programming</text>
+                <text class="node-label" x="300" y="590" style="font-size:10px">Computers</text>
+                <text class="node-label" x="500" y="530" style="font-size:10px">Documentaries</text>
+                <text class="node-label" x="500" y="570" style="font-size:10px">Micro-Films</text>
+                <path class="link" d="M400,130 L400,220" marker-end="url(#arrow)"></path>
+                <path class="link" d="M400,280 L400,370" marker-end="url(#arrow)"></path>
+                <path class="link" d="M400,430 L400,520" marker-end="url(#arrow)"></path>
+                <path class="branch-link" d="M400,100 L300,80"></path>
+                <path class="branch-link" d="M400,100 L300,120"></path>
+                <path class="branch-link" d="M400,100 L500,100"></path>
+                <path class="branch-link" d="M400,250 L300,230"></path>
+                <path class="branch-link" d="M400,250 L300,270"></path>
+                <path class="branch-link" d="M400,250 L500,250"></path>
+                <path class="branch-link" d="M400,400 L300,380"></path>
+                <path class="branch-link" d="M400,400 L300,420"></path>
+                <path class="branch-link" d="M400,400 L500,400"></path>
+                <path class="branch-link" d="M400,550 L300,510"></path>
+                <path class="branch-link" d="M400,550 L300,550"></path>
+                <path class="branch-link" d="M400,550 L300,590"></path>
+                <path class="branch-link" d="M400,550 L500,530"></path>
+                <path class="branch-link" d="M400,550 L500,570"></path>
+                <rect x="700" y="100" width="150" height="140" fill="rgba(0,0,0,0.6)" stroke="#00d1ff" stroke-width="1"/>
+                <text class="legend-text" x="710" y="120" style="font-weight:bold;fill:#f5f5f5">Legend</text>
+                <circle class="legend-node elementary" cx="720" cy="140" r="10"></circle>
+                <text class="legend-text" x="740" y="140" style="fill:#f5f5f5">Elementary School</text>
+                <circle class="legend-node middle" cx="720" cy="160" r="10"></circle>
+                <text class="legend-text" x="740" y="160" style="fill:#f5f5f5">Middle School</text>
+                <circle class="legend-node high" cx="720" cy="180" r="10"></circle>
+                <text class="legend-text" x="740" y="180" style="fill:#f5f5f5">High School</text>
+                <circle class="legend-node college" cx="720" cy="200" r="10"></circle>
+                <text class="legend-text" x="740" y="200" style="fill:#f5f5f5">College</text>
+                <circle class="legend-node branch-node" cx="720" cy="220" r="10"></circle>
+                <text class="legend-text" x="740" y="220" style="fill:#f5f5f5">Subjects</text>
+                <defs>
+                    <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" class="arrowhead" />
+                    </marker>
+                </defs>
+            </svg>
+            <div class="learning-tooltip"></div>
+        </section>
 
-    <div class="legend">
-        <h4>Travel Type</h4>
-        <div class="legend-item"><div class="legend-dot purple"></div><span>Attended / Lived</span></div>
-        <div class="legend-item"><div class="legend-dot blue"></div><span>Family Travel</span></div>
-        <div class="legend-item"><div class="legend-dot red"></div><span>Personal Adventure</span></div>
-    </div>
-</section>
+        <section id="learning-matrix" class="glass-panel">
+            <div class="section-heading">
+                <p class="eyebrow">Matrix</p>
+                <h2>Learning experience adjacency matrix</h2>
+            </div>
+            <div class="matrix-container">
+                <div id="matrix-container"></div>
+            </div>
+            <div class="matrix-legend">
+                <div class="matrix-legend-item"><div class="legend-circle elementary"></div> Elementary</div>
+                <div class="matrix-legend-item"><div class="legend-circle middle"></div> Middle</div>
+                <div class="matrix-legend-item"><div class="legend-circle high"></div> High</div>
+                <div class="matrix-legend-item"><div class="legend-circle college"></div> College</div>
+                <div class="matrix-legend-item"><div class="legend-circle branch-node"></div> Subjects</div>
+            </div>
+            <div class="matrix-tooltip"></div>
+        </section>
+    </main>
 
-<!-- ==================== LEARNING EXPERIENCE DIAGRAM ==================== -->
-<section id="learning-experience">
-    <h2>TSOI Yan Yan's Learning Experience at Different Stages</h2>
-    <svg id="learning-svg" width="900" height="700" viewBox="0 0 900 700" preserveAspectRatio="xMidYMid meet">
-        <!-- [Same SVG content as before - unchanged] -->
-        <text class="title" x="450" y="40" style="font-size:18px;font-weight:bold;fill:#333;text-anchor:middle;">TSOI Yan Yan's Learning Experience</text>
-        <circle class="main-node elementary" cx="400" cy="100" r="30" data-label="Elementary School"></circle>
-        <circle class="main-node middle" cx="400" cy="250" r="30" data-label="Middle School"></circle>
-        <circle class="main-node high" cx="400" cy="400" r="30" data-label="High School"></circle>
-        <circle class="main-node college" cx="400" cy="550" r="30" data-label="College"></circle>
-        <circle class="branch-node" cx="300" cy="80" r="15" data-label="Children's Painting"></circle>
-        <circle class="branch-node" cx="300" cy="120" r="15" data-label="Dancing"></circle>
-        <circle class="branch-node" cx="500" cy="100" r="15" data-label="Singing"></circle>
-        <circle class="branch-node" cx="300" cy="230" r="15" data-label="Latin Dance"></circle>
-        <circle class="branch-node" cx="300" cy="270" r="15" data-label="Sketching"></circle>
-        <circle class="branch-node" cx="500" cy="250" r="15" data-label="Watercolor"></circle>
-        <circle class="branch-node" cx="300" cy="380" r="15" data-label="Micro-Film"></circle>
-        <circle class="branch-node" cx="300" cy="420" r="15" data-label="Sculpture"></circle>
-        <circle class="branch-node" cx="500" cy="400" r="15" data-label="Photography"></circle>
-        <circle class="branch-node" cx="300" cy="510" r="15" data-label="Music"></circle>
-        <circle class="branch-node" cx="300" cy="550" r="15" data-label="Programming"></circle>
-        <circle class="branch-node" cx="300" cy="590" r="15" data-label="Computers"></circle>
-        <circle class="branch-node" cx="500" cy="530" r="15" data-label="Documentaries"></circle>
-        <circle class="branch-node" cx="500" cy="570" r="15" data-label="Micro-Films"></circle>
-        <text class="node-label" x="400" y="100">Elementary</text>
-        <text class="node-label" x="400" y="250">Middle</text>
-        <text class="node-label" x="400" y="400">High</text>
-        <text class="node-label" x="400" y="550">College</text>
-        <text class="node-label" x="300" y="80" style="font-size:10px">Painting</text>
-        <text class="node-label" x="300" y="120" style="font-size:10px">Dancing</text>
-        <text class="node-label" x="500" y="100" style="font-size:10px">Singing</text>
-        <text class="node-label" x="300" y="230" style="font-size:10px">Latin Dance</text>
-        <text class="node-label" x="300" y="270" style="font-size:10px">Sketching</text>
-        <text class="node-label" x="500" y="250" style="font-size:10px">Watercolor</text>
-        <text class="node-label" x="300" y="380" style="font-size:10px">Micro-Film</text>
-        <text class="node-label" x="300" y="420" style="font-size:10px">Sculpture</text>
-        <text class="node-label" x="500" y="400" style="font-size:10px">Photography</text>
-        <text class="node-label" x="300" y="510" style="font-size:10px">Music</text>
-        <text class="node-label" x="300" y="550" style="font-size:10px">Programming</text>
-        <text class="node-label" x="300" y="590" style="font-size:10px">Computers</text>
-        <text class="node-label" x="500" y="530" style="font-size:10px">Documentaries</text>
-        <text class="node-label" x="500" y="570" style="font-size:10px">Micro-Films</text>
-        <path class="link" d="M400,130 L400,220" marker-end="url(#arrow)"></path>
-        <path class="link" d="M400,280 L400,370" marker-end="url(#arrow)"></path>
-        <path class="link" d="M400,430 L400,520" marker-end="url(#arrow)"></path>
-        <path class="branch-link" d="M400,100 L300,80"></path>
-        <path class="branch-link" d="M400,100 L300,120"></path>
-        <path class="branch-link" d="M400,100 L500,100"></path>
-        <path class="branch-link" d="M400,250 L300,230"></path>
-        <path class="branch-link" d="M400,250 L300,270"></path>
-        <path class="branch-link" d="M400,250 L500,250"></path>
-        <path class="branch-link" d="M400,400 L300,380"></path>
-        <path class="branch-link" d="M400,400 L300,420"></path>
-        <path class="branch-link" d="M400,400 L500,400"></path>
-        <path class="branch-link" d="M400,550 L300,510"></path>
-        <path class="branch-link" d="M400,550 L300,550"></path>
-        <path class="branch-link" d="M400,550 L300,590"></path>
-        <path class="branch-link" d="M400,550 L500,530"></path>
-        <path class="branch-link" d="M400,550 L500,570"></path>
-        <rect x="700" y="100" width="150" height="140" fill="white" stroke="#ccc" stroke-width="1"/>
-        <text class="legend-text" x="710" y="120" style="font-weight:bold">Legend</text>
-        <circle class="legend-node elementary" cx="720" cy="140" r="10"></circle>
-        <text class="legend-text" x="740" y="140">Elementary School</text>
-        <circle class="legend-node middle" cx="720" cy="160" r="10"></circle>
-        <text class="legend-text" x="740" y="160">Middle School</text>
-        <circle class="legend-node high" cx="720" cy="180" r="10"></circle>
-        <text class="legend-text" x="740" y="180">High School</text>
-        <circle class="legend-node college" cx="720" cy="200" r="10"></circle>
-        <text class="legend-text" x="740" y="200">College</text>
-        <circle class="legend-node branch-node" cx="720" cy="220" r="10"></circle>
-        <text class="legend-text" x="740" y="220">Subjects</text>
-        <defs>
-            <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 0 L 10 5 L 0 10 z" class="arrowhead" />
-            </marker>
-        </defs>
-    </svg>
-    <div class="learning-tooltip"></div>
-</section>
+    <!-- ==================== SCRIPTS ==================== -->
+    <script>
+        document.getElementById('cv').addEventListener('click', () => alert('Let me tell you more about myself!'));
+    </script>
 
-<!-- ==================== LEARNING EXPERIENCE ADJACENCY MATRIX ==================== -->
-<section id="learning-matrix">
-    <h2>Learning Experience Adjacency Matrix</h2>
-    <div class="matrix-container">
-        <div id="matrix-container"></div>
-    </div>
-    <div class="matrix-legend">
-        <div class="matrix-legend-item"><div class="legend-circle elementary"></div> Elementary</div>
-        <div class="matrix-legend-item"><div class="legend-circle middle"></div> Middle</div>
-        <div class="matrix-legend-item"><div class="legend-circle high"></div> High</div>
-        <div class="matrix-legend-item"><div class="legend-circle college"></div> College</div>
-        <div class="matrix-legend-item"><div class="legend-circle branch-node"></div> Subjects</div>
-    </div>
-    <div class="matrix-tooltip"></div>
-</section>
+    <script src="hobbies_scatterplot.js"></script>
+    <script src="scatterplot_animation.js"></script>
 
-<!-- ==================== SCRIPTS ==================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const data = [
+                {label:'Hot Pot',  value:35},
+                {label:'Barbecue',value:25},
+                {label:'Burgers',  value:20},
+                {label:'Pizza',    value:10},
+                {label:'Sushi',    value:10}
+            ];
 
-<!-- CV button alert -->
-<script>
-    document.getElementById('cv').addEventListener('click',()=>alert('Let me tell you more about myself!'));
-</script>
+            const colors = d3.scaleOrdinal()
+                .domain(data.map(d=>d.label))
+                .range(['#00d1ff','#7a7cff','#ff5c77','#f5f5f5','#6fffb0']);
 
-<!-- Hobbies scatterplot -->
-<script src="hobbies_scatterplot.js"></script>
-<script src="scatterplot_animation.js"></script>
+            const w = 500, h = 500, r = Math.min(w,h)/2;
 
-<!-- Favorite Foods Pie Chart -->
-<script>
-    document.addEventListener('DOMContentLoaded',()=>{
+            const svg = d3.select('#pie-chart')
+                .attr('width',w).attr('height',h)
+                .append('g')
+                .attr('transform',`translate(${w/2},${h/2})`);
 
-        const data = [
-            {label:'Hot Pot',  value:35},
-            {label:'Barbecue',value:25},
-            {label:'Burgers',  value:20},
-            {label:'Pizza',    value:10},
-            {label:'Sushi',    value:10}
-        ];
+            const pie = d3.pie().sort(null).value(d=>d.value);
+            const arc = d3.arc().innerRadius(0).outerRadius(r);
 
-        const colors = d3.scaleOrdinal()
-            .domain(data.map(d=>d.label))
-            .range(['#FF5733','#36A2EB','#FFC300','#4CAF50','#9966FF']);
+            const arcs = svg.selectAll('.arc')
+                .data(pie(data))
+                .enter().append('g').attr('class','arc');
 
-        const w = 500, h = 500, r = Math.min(w,h)/2;
+            arcs.append('path')
+                .attr('d',arc)
+                .attr('fill',d=>colors(d.data.label))
+                .attr('stroke','#0e0e0e')
+                .attr('stroke-width',1.5);
 
-        const svg = d3.select('#pie-chart')
-            .attr('width',w).attr('height',h)
-            .append('g')
-            .attr('transform',`translate(${w/2},${h/2})`);
+            arcs.append('text')
+                .attr('transform',d=>`translate(${arc.centroid(d)})`)
+                .attr('dy','.35em')
+                .style('text-anchor','middle')
+                .style('font-size','14px')
+                .style('fill','#0e0e0e')
+                .style('font-weight','600')
+                .text(d=>`${d.data.value.toFixed(1)}%`);
 
-        const pie = d3.pie().sort(null).value(d=>d.value);
-        const arc = d3.arc().innerRadius(0).outerRadius(r);
+            const legend = d3.select('#pie-legend');
+            const items = legend.selectAll('.legend-item')
+                .data(data).enter()
+                .append('div').attr('class','legend-item');
 
-        const arcs = svg.selectAll('.arc')
-            .data(pie(data))
-            .enter().append('g').attr('class','arc');
+            items.append('div')
+                .attr('class','color')
+                .style('background-color',d=>colors(d.label));
 
-        arcs.append('path')
-            .attr('d',arc)
-            .attr('fill',d=>colors(d.data.label));
+            items.append('span')
+                .text(d=>`${d.label} (${d.value.toFixed(1)}%)`);
+        });
+    </script>
 
-        arcs.append('text')
-            .attr('transform',d=>`translate(${arc.centroid(d)})`)
-            .attr('dy','.35em')
-            .style('text-anchor','middle')
-            .style('font-size','12px')
-            .style('fill','white')
-            .style('font-weight','bold')
-            .text(d=>`${d.data.value.toFixed(1)}%`);
+    <script src="personalData.js"></script>
 
-        const legend = d3.select('#pie-legend');
-        const items = legend.selectAll('.legend-item')
-            .data(data).enter()
-            .append('div').attr('class','legend-item');
+    <script>
+        const map = L.map('map').setView([34.5,108],4.5);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
+            attribution:'&copy; OpenStreetMap &copy; CARTO',
+            subdomains:'abcd',maxZoom:20
+        }).addTo(map);
 
-        items.append('div')
-            .attr('class','color')
-            .style('background-color',d=>colors(d.label));
-
-        items.append('span')
-            .text(d=>`${d.label} (${d.value.toFixed(1)}%)`);
-    });
-</script>
-
-<!-- Personal data tree -->
-<script src="personalData.js"></script>
-
-<!-- Travel map script -->
-<script>
-    const map = L.map('map').setView([34.5,108],4.5);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
-        attribution:'&copy; OpenStreetMap &copy; CARTO',
-        subdomains:'abcd',maxZoom:20
-    }).addTo(map);
-
-    function addGlowDot(lat,lng,color,r=6,op=.95,label=''){
-        const m = L.circleMarker([lat,lng],{color:'#000',weight:1.8,fillColor:color,fillOpacity:op,radius:r}).addTo(map);
-        m._path.style.filter = `drop-shadow(0 0 6px ${color})`;
-        if(label) m.bindTooltip(label,{permanent:false,direction:'top',offset:[0,-10],className:'custom-tooltip'});
-    }
-    function addDensityCluster(cLat,cLng,color,cnt=20,spread=.5,label=''){
-        for(let i=0;i<cnt;i++){
-            const oLat = (Math.random()-.5)*spread;
-            const oLng = (Math.random()-.5)*spread;
-            addGlowDot(cLat+oLat,cLng+oLng,color,3+Math.random()*3,.75+Math.random()*.2);
+        function addGlowDot(lat,lng,color,r=6,op=.95,label=''){
+            const marker = L.circleMarker([lat,lng],{color:'#0e0e0e',weight:2,fillColor:color,fillOpacity:op,radius:r}).addTo(map);
+            marker._path.style.filter = `drop-shadow(0 0 10px ${color})`;
+            if(label) marker.bindTooltip(label,{permanent:false,direction:'top',offset:[0,-10],className:'custom-tooltip'});
         }
-        addGlowDot(cLat,cLng,color,11,1,label);
-    }
+        function addDensityCluster(cLat,cLng,color,cnt=20,spread=.5,label=''){
+            for(let i=0;i<cnt;i++){
+                const oLat = (Math.random()-.5)*spread;
+                const oLng = (Math.random()-.5)*spread;
+                addGlowDot(cLat+oLat,cLng+oLng,color,3+Math.random()*3,.75+Math.random()*.2);
+            }
+            addGlowDot(cLat,cLng,color,11,1,label);
+        }
 
-    const places = {
-        fujian:{lat:26.0750,lng:119.2951,label:"Fujian (Hometown)",color:'#FF00FF',density:28},
-        hongkong:{lat:22.3193,lng:114.1694,label:"Hong Kong (School)",color:'#FF00FF',density:15},
-        xian:{lat:34.3416,lng:108.9398,label:"Xi'an",color:'#00FFFF'},
-        beijing:{lat:39.9042,lng:116.4074,label:"Beijing",color:'#00FFFF'},
-        nanjing:{lat:32.0603,lng:118.7969,label:"Nanjing",color:'#00FFFF'},
-        luoyang:{lat:34.6630,lng:112.3890,label:"Luoyang",color:'#00FFFF'},
-        kaifeng:{lat:34.7973,lng:114.3074,label:"Kaifeng",color:'#00FFFF'},
-        hangzhou:{lat:30.2741,lng:120.1551,label:"Hangzhou",color:'#00FFFF'},
-        anyang:{lat:36.0976,lng:114.3923,label:"Anyang",color:'#00FFFF'},
-        zhengzhou:{lat:34.7578,lng:113.6654,label:"Zhengzhou",color:'#00FFFF'},
-        chengdu:{lat:30.5728,lng:104.0668,label:"Chengdu",color:'#00FFFF'},
-        chongqing:{lat:29.5630,lng:106.5516,label:"Chongqing",color:'#00FFFF'},
-        guangzhou:{lat:23.1291,lng:113.2644,label:"Guangzhou",color:'#00FFFF'},
-        guilin:{lat:25.2736,lng:110.2902,label:"Guilin",color:'#FF0000'},
-        suzhou:{lat:31.2990,lng:120.6196,label:"Suzhou",color:'#FF0000'},
-        kunming:{lat:25.0388,lng:102.7094,label:"Kunming",color:'#FF0000'},
-        zhangjiajie:{lat:29.1171,lng:110.4792,label:"Zhangjiajie",color:'#FF0000'},
-        sanya:{lat:18.2524,lng:109.5119,label:"Sanya",color:'#FF0000'},
-        xian_red:{lat:34.3416,lng:108.9398,label:"Xi'an (Adventure)",color:'#FF0000'},
-        hangzhou_red:{lat:30.2741,lng:120.1551,label:"Hangzhou (Adventure)",color:'#FF0000'}
-    };
+        const places = {
+            fujian:{lat:26.0750,lng:119.2951,label:"Fujian (Hometown)",color:'#ba68ff',density:28},
+            hongkong:{lat:22.3193,lng:114.1694,label:"Hong Kong (School)",color:'#ba68ff',density:15},
+            xian:{lat:34.3416,lng:108.9398,label:"Xi'an",color:'#00d1ff'},
+            beijing:{lat:39.9042,lng:116.4074,label:"Beijing",color:'#00d1ff'},
+            nanjing:{lat:32.0603,lng:118.7969,label:"Nanjing",color:'#00d1ff'},
+            luoyang:{lat:34.6630,lng:112.3890,label:"Luoyang",color:'#00d1ff'},
+            kaifeng:{lat:34.7973,lng:114.3074,label:"Kaifeng",color:'#00d1ff'},
+            hangzhou:{lat:30.2741,lng:120.1551,label:"Hangzhou",color:'#00d1ff'},
+            anyang:{lat:36.0976,lng:114.3923,label:"Anyang",color:'#00d1ff'},
+            zhengzhou:{lat:34.7578,lng:113.6654,label:"Zhengzhou",color:'#00d1ff'},
+            chengdu:{lat:30.5728,lng:104.0668,label:"Chengdu",color:'#00d1ff'},
+            chongqing:{lat:29.5630,lng:106.5516,label:"Chongqing",color:'#00d1ff'},
+            guangzhou:{lat:23.1291,lng:113.2644,label:"Guangzhou",color:'#00d1ff'},
+            guilin:{lat:25.2736,lng:110.2902,label:"Guilin",color:'#ff5c77'},
+            suzhou:{lat:31.2990,lng:120.6196,label:"Suzhou",color:'#ff5c77'},
+            kunming:{lat:25.0388,lng:102.7094,label:"Kunming",color:'#ff5c77'},
+            zhangjiajie:{lat:29.1171,lng:110.4792,label:"Zhangjiajie",color:'#ff5c77'},
+            sanya:{lat:18.2524,lng:109.5119,label:"Sanya",color:'#ff5c77'},
+            xian_red:{lat:34.3416,lng:108.9398,label:"Xi'an (Adventure)",color:'#ff5c77'},
+            hangzhou_red:{lat:30.2741,lng:120.1551,label:"Hangzhou (Adventure)",color:'#ff5c77'}
+        };
 
-    addDensityCluster(places.fujian.lat,places.fujian.lng,places.fujian.color,places.fujian.density,.7,places.fujian.label);
-    addDensityCluster(places.hongkong.lat,places.hongkong.lng,places.hongkong.color,places.hongkong.density,.18,places.hongkong.label);
+        addDensityCluster(places.fujian.lat,places.fujian.lng,places.fujian.color,places.fujian.density,.7,places.fujian.label);
+        addDensityCluster(places.hongkong.lat,places.hongkong.lng,places.hongkong.color,places.hongkong.density,.18,places.hongkong.label);
 
-    [places.xian,places.beijing,places.nanjing,places.luoyang,places.kaifeng,
-     places.hangzhou,places.anyang,places.zhengzhou,places.chengdu,
-     places.chongqing,places.guangzhou].forEach(p=>addGlowDot(p.lat,p.lng,p.color,7,.95,p.label));
+        [places.xian,places.beijing,places.nanjing,places.luoyang,places.kaifeng,
+         places.hangzhou,places.anyang,places.zhengzhou,places.chengdu,
+         places.chongqing,places.guangzhou].forEach(p=>addGlowDot(p.lat,p.lng,p.color,7,.95,p.label));
 
-    [places.guilin,places.suzhou,places.kunming,places.zhangjiajie,
-     places.sanya,places.xian_red,places.hangzhou_red].forEach(p=>addGlowDot(p.lat,p.lng,p.color,7,.95,p.label));
-</script>
+        [places.guilin,places.suzhou,places.kunming,places.zhangjiajie,
+         places.sanya,places.xian_red,places.hangzhou_red].forEach(p=>addGlowDot(p.lat,p.lng,p.color,7,.95,p.label));
+    </script>
 
-<!-- Learning Experience Interactivity -->
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const nodes = document.querySelectorAll('#learning-svg .main-node, #learning-svg .branch-node');
-        const tooltip = document.querySelector('.learning-tooltip');
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const nodes = document.querySelectorAll('#learning-svg .main-node, #learning-svg .branch-node');
+            const tooltip = document.querySelector('.learning-tooltip');
 
-        nodes.forEach(node => {
-            node.addEventListener('mouseover', (e) => {
-                tooltip.style.opacity = '1';
-                tooltip.textContent = node.getAttribute('data-label');
-                tooltip.style.left = `${e.pageX + 10}px`;
-                tooltip.style.top = `${e.pageY + 10}px`;
-            });
-            node.addEventListener('mouseout', () => {
-                tooltip.style.opacity = '0';
-            });
-            node.addEventListener('mousemove', (e) => {
-                tooltip.style.left = `${e.pageX + 10}px`;
-                tooltip.style.top = `${e.pageY + 10}px`;
-            });
-        });
-    });
-</script>
-
-<!-- Adjacency Matrix Script -->
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const rowHeaders = [
-            "Children's Painting", "Dancing", "Singing",
-            "Latin Dance", "Sketching", "Watercolor",
-            "Micro-Film (High)", "Sculpture", "Photography",
-            "Music", "Programming", "Computers", "Documentaries", "Micro-Films (College)"
-        ];
-
-        const colHeaders = ["Elementary School", "Middle School", "High School", "College"];
-
-        const matrix = Array(14).fill().map(() => Array(4).fill(0));
-
-        const edges = [
-            { from: "Children's Painting", to: "Elementary School" },
-            { from: "Dancing", to: "Elementary School" },
-            { from: "Singing", to: "Elementary School" },
-            { from: "Latin Dance", to: "Middle School" },
-            { from: "Sketching", to: "Middle School" },
-            { from: "Watercolor", to: "Middle School" },
-            { from: "Micro-Film (High)", to: "High School" },
-            { from: "Sculpture", to: "High School" },
-            { from: "Photography", to: "High School" },
-            { from: "Music", to: "College" },
-            { from: "Programming", to: "College" },
-            { from: "Computers", to: "College" },
-            { from: "Documentaries", to: "College" },
-            { from: "Micro-Films (College)", to: "College" }
-        ];
-
-        edges.forEach(edge => {
-            const i = rowHeaders.indexOf(edge.from);
-            const j = colHeaders.indexOf(edge.to);
-            if (i !== -1 && j !== -1) matrix[i][j] = 1;
-        });
-
-        const container = document.getElementById('matrix-container');
-        const table = document.createElement('table');
-        table.id = 'matrix-table';
-
-        const headerRow = document.createElement('tr');
-        headerRow.innerHTML = '<th></th>' + colHeaders.map((node, j) => {
-            let cls = 'main-node';
-            if (node.includes('Elementary')) cls += ' elementary';
-            else if (node.includes('Middle')) cls += ' middle';
-            else if (node.includes('High')) cls += ' high';
-            else if (node.includes('College')) cls += ' college';
-            return `<th class="${cls}">${node}</th>`;
-        }).join('');
-        table.appendChild(headerRow);
-
-        rowHeaders.forEach((rowNode, i) => {
-            const row = document.createElement('tr');
-            const rowHeader = document.createElement('th');
-            rowHeader.className = 'branch-node';
-            rowHeader.textContent = rowNode;
-            row.appendChild(rowHeader);
-
-            colHeaders.forEach((colNode, j) => {
-                const cell = document.createElement('td');
-                cell.textContent = matrix[i][j];
-                if (matrix[i][j] === 1) {
-                    cell.classList.add('connected');
-                    cell.setAttribute('data-tooltip', `${rowNode} → ${colNode}`);
-                }
-                row.appendChild(cell);
-            });
-            table.appendChild(row);
-        });
-        container.appendChild(table);
-
-        // Tooltip for matrix
-        const tooltip = document.querySelector('.matrix-tooltip');
-        document.querySelectorAll('#matrix-table td.connected').forEach(cell => {
-            cell.addEventListener('mouseover', (e) => {
-                tooltip.style.opacity = '1';
-                tooltip.textContent = cell.getAttribute('data-tooltip');
-                tooltip.style.left = `${e.pageX + 12}px`;
-                tooltip.style.top = `${e.pageY + 12}px`;
-            });
-            cell.addEventListener('mousemove', (e) => {
-                tooltip.style.left = `${e.pageX + 12}px`;
-                tooltip.style.top = `${e.pageY + 12}px`;
-            });
-            cell.addEventListener('mouseout', () => {
-                tooltip.style.opacity = '0';
+            nodes.forEach(node => {
+                node.addEventListener('mouseover', (e) => {
+                    tooltip.style.opacity = '1';
+                    tooltip.textContent = node.getAttribute('data-label');
+                    tooltip.style.left = `${e.pageX + 10}px`;
+                    tooltip.style.top = `${e.pageY + 10}px`;
+                });
+                node.addEventListener('mouseout', () => {
+                    tooltip.style.opacity = '0';
+                });
+                node.addEventListener('mousemove', (e) => {
+                    tooltip.style.left = `${e.pageX + 10}px`;
+                    tooltip.style.top = `${e.pageY + 10}px`;
+                });
             });
         });
-    });
-</script>
+    </script>
 
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99ac30493b7304d2',t:'MTc2MjUxMTc3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const rowHeaders = [
+                "Children's Painting", "Dancing", "Singing",
+                "Latin Dance", "Sketching", "Watercolor",
+                "Micro-Film (High)", "Sculpture", "Photography",
+                "Music", "Programming", "Computers", "Documentaries", "Micro-Films (College)"
+            ];
+
+            const colHeaders = ["Elementary School", "Middle School", "High School", "College"];
+
+            const matrix = Array(14).fill().map(() => Array(4).fill(0));
+
+            const edges = [
+                { from: "Children's Painting", to: "Elementary School" },
+                { from: "Dancing", to: "Elementary School" },
+                { from: "Singing", to: "Elementary School" },
+                { from: "Latin Dance", to: "Middle School" },
+                { from: "Sketching", to: "Middle School" },
+                { from: "Watercolor", to: "Middle School" },
+                { from: "Micro-Film (High)", to: "High School" },
+                { from: "Sculpture", to: "High School" },
+                { from: "Photography", to: "High School" },
+                { from: "Music", to: "College" },
+                { from: "Programming", to: "College" },
+                { from: "Computers", to: "College" },
+                { from: "Documentaries", to: "College" },
+                { from: "Micro-Films (College)", to: "College" }
+            ];
+
+            edges.forEach(edge => {
+                const i = rowHeaders.indexOf(edge.from);
+                const j = colHeaders.indexOf(edge.to);
+                if (i !== -1 && j !== -1) matrix[i][j] = 1;
+            });
+
+            const container = document.getElementById('matrix-container');
+            const table = document.createElement('table');
+            table.id = 'matrix-table';
+
+            const headerRow = document.createElement('tr');
+            headerRow.innerHTML = '<th></th>' + colHeaders.map((node) => {
+                let cls = 'main-node';
+                if (node.includes('Elementary')) cls += ' elementary';
+                else if (node.includes('Middle')) cls += ' middle';
+                else if (node.includes('High')) cls += ' high';
+                else if (node.includes('College')) cls += ' college';
+                return `<th class="${cls}">${node}</th>`;
+            }).join('');
+            table.appendChild(headerRow);
+
+            rowHeaders.forEach((rowNode, i) => {
+                const row = document.createElement('tr');
+                const rowHeader = document.createElement('th');
+                rowHeader.className = 'branch-node';
+                rowHeader.textContent = rowNode;
+                row.appendChild(rowHeader);
+
+                colHeaders.forEach((colNode, j) => {
+                    const cell = document.createElement('td');
+                    cell.textContent = matrix[i][j];
+                    if (matrix[i][j] === 1) {
+                        cell.classList.add('connected');
+                        cell.setAttribute('data-tooltip', `${rowNode} → ${colNode}`);
+                    }
+                    row.appendChild(cell);
+                });
+                table.appendChild(row);
+            });
+            container.appendChild(table);
+
+            const tooltip = document.querySelector('.matrix-tooltip');
+            document.querySelectorAll('#matrix-table td.connected').forEach(cell => {
+                cell.addEventListener('mouseover', (e) => {
+                    tooltip.style.opacity = '1';
+                    tooltip.textContent = cell.getAttribute('data-tooltip');
+                    tooltip.style.left = `${e.pageX + 12}px`;
+                    tooltip.style.top = `${e.pageY + 12}px`;
+                });
+                cell.addEventListener('mousemove', (e) => {
+                    tooltip.style.left = `${e.pageX + 12}px`;
+                    tooltip.style.top = `${e.pageY + 12}px`;
+                });
+                cell.addEventListener('mouseout', () => {
+                    tooltip.style.opacity = '0';
+                });
+            });
+        });
+    </script>
+</body>
 </html>
