@@ -1,14 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <link href="style.css" rel="stylesheet"/>
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <script src="https://d3js.org/d3.v7.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio: Advertisement Designs, Videos, and Social Media</title>
+    <!-- High-Tech Futuristic Style -->
+    <style>
+        /* HIGH-TECH FUTURISTIC THEME – Minimal Cyber Luxury */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Exo+2:wght@300;500;700&display=swap');
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            background: #000;
+            color: #e0e0e0;
+            font-family: 'Exo 2', sans-serif;
+            scroll-behavior: smooth;
+            min-height: 100vh;
+        }
+
+        body {
+            background: radial-gradient(circle at top left, #0a1a2f 0%, #000 60%);
+            overflow-x: hidden;
+            padding: 2rem;
+        }
+
+        /* Navigation */
+        nav {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        nav a {
+            color: #00ffff;
+            text-decoration: none;
+            margin: 0 1.5rem;
+            font-size: 1.2rem;
+            text-shadow: 0 0 10px #00ffff;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #ff00ff;
+        }
+
+        /* Section Styling */
+        section {
+            max-width: 1200px;
+            margin: 0 auto 5rem;
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            text-align: center;
+            color: #00ffff;
+            text-shadow: 0 0 20px #00ffff;
+            letter-spacing: 2px;
+            margin-bottom: 3rem;
+        }
+
+        h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: #ff00ff;
+            text-shadow: 0 0 15px #ff00ff;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        /* Cards Container */
+        .designs-container, .videos-container, .platform-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        .design-card, .video-card, .social-card {
+            background: rgba(15, 20, 35, 0.45);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(100, 200, 255, 0.15);
+            border-radius: 15px;
+            padding: 1.5rem;
+            width: 300px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s;
+            box-shadow: 0 10px 30px rgba(0, 100, 200, 0.15);
+        }
+
+        .design-card:hover, .video-card:hover, .social-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 255, 255, 0.3);
+            border-color: #00ffff;
+        }
+
+        .design-card img, .video-card img, .social-card img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+        }
+
+        .design-card .title, .video-card .title, .social-card .title {
+            font-size: 1.2rem;
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .design-card .description, .video-card .description, .social-card .description {
+            font-size: 0.9rem;
+            color: #aaa;
+            line-height: 1.4;
+        }
+
+        /* Modal Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.8);
+            padding-top: 50px;
+        }
+
+        .modal-content {
+            background: rgba(10, 15, 30, 0.7);
+            backdrop-filter: blur(20px);
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #00ffff;
+            width: 80%;
+            max-width: 1200px;
+            border-radius: 15px;
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.3);
+        }
+
+        .close {
+            color: #00ffff;
+            position: absolute;
+            top: 10px;
+            right: 25px;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        .close:hover {
+            color: #fff;
+        }
+
+        iframe {
+            width: 100%;
+            height: 70vh;
+            border: none;
+            border-radius: 10px;
+        }
+
+        /* Scanline Animation */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, #00ffff, transparent);
+            animation: scanline 6s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+    </style>
 </head>
 <body>
 
-<section id="vis-scatterplot">
-   <h2> This is my scatterplot about my prior work.</h2>
-</section>
+    <nav>
+        <a href="#ad-designs">Advertisement Designs</a>
+        <a href="#videos">Videos</a>
+        <a href="#social-media">Social Media Operations</a>
+    </nav>
+
+    <section id="ad-designs">
+        <h2>Advertisement Designs</h2>
+        <div class="designs-container">
+            <!-- Lee Kum Kee Design -->
+            <div class="design-card" onclick="openPdfModal('李錦記廣告設計.pdf')">
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/f/fc/Lee_Kum_Kee_logo.svg/1200px-Lee_Kum_Kee_logo.svg.png" alt="Lee Kum Kee Logo">
+                <p class="title">Lee Kum Kee Advertisement Design</p>
+                <p class="description">This design positions Lee Kum Kee as a premium, innovative sauce brand against traditional competitors like Knorr, emphasizing high-end appeal, fusion cuisine, and modern family usage in a competitive market analysis.</p>
+            </div>
+
+            <!-- CanPrev Design -->
+            <div class="design-card" onclick="openPdfModal('CanPrev廣告設計.pdf')">
+                <img src="https://bikeforbrainhealth.ca/wp-content/uploads/2024/12/CanPrev_logo_web.jpg" alt="CanPrev Logo">
+                <p class="title">CanPrev Advertisement Design</p>
+                <p class="description">Strategic positioning for CanPrev Collagen Beauty, leveraging VERISOL® clinical trials showing 20% wrinkle reduction in 28 days, professional trust, purity, and superior value in the growing global collagen supplement market.</p>
+            </div>
+
+            <!-- Doughnut Design -->
+            <div class="design-card" onclick="openPdfModal('Doughnut 廣告設計.pdf')">
+                <img src="https://doughnutofficial.us/cdn/shop/files/Doughnut_Logo.jpg?v=1679633993" alt="Doughnut Logo">
+                <p class="title">Doughnut Advertisement Design</p>
+                <p class="description">Campaign for Doughnut backpacks targeting youthful explorers, highlighting functional, multi-environment designs with urban-outdoor fusion, Macaroon series features, and 'Exploration Elevated' theme through dynamic visuals and pre-production strategy.</p>
+            </div>
+
+            <!-- Hya-Love Poster -->
+            <div class="design-card" onclick="openPdfModal('Hya Love post adv v2 (A4 (橫式))_20251008_194649_0000.pdf')">
+                <img src="hya-love-poster.jpg" alt="Hya-Love Poster Preview">
+                <p class="title">Hya-Love Advertisement Poster</p>
+                <p class="description">Hya-Love hyaluronate supplement with Living Silica for superior hydration, helps increase skin moisture, support collagen formation for skin, hair, nails, promote radiant skin, and protect against oxidative damage.</p>
+            </div>
+
+            <!-- Collagen Beauty Powder Poster -->
+            <div class="design-card" onclick="openPdfModal('Collagen Powder Adv 的副本_20251008_171700_0000.pdf')">
+                <img src="collagen-beauty-poster.jpg" alt="Collagen Beauty Poster Preview">
+                <p class="title">Collagen Beauty Powder Advertisement Poster</p>
+                <p class="description">Collagen Beauty Powder with VERISOL patent, clinically proven to reduce wrinkles by 20% in 28 days, stimulates skin fibroblasts, bioactive powder under 2kDa for direct collagen synthesis in skin.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="videos">
+        <h2>Videos</h2>
+        <div class="videos-container">
+            <!-- Hong Kong Cheongsam -->
+            <div class="video-card" onclick="openVideoModal('h5OofwyICE8')">
+                <img src="https://img.youtube.com/vi/h5OofwyICE8/0.jpg" alt="Hong Kong Cheongsam Preview">
+                <p class="title">Hong Kong Cheongsam</p>
+                <p class="description">This engaging interview features industry experts discussing innovative trends, personal experiences, and future insights in technology and creativity, offering viewers a 15-minute deep dive into emerging topics and inspirations.</p>
+            </div>
+
+            <!-- The Story of Clones -->
+            <div class="video-card" onclick="openVideoModal('t9cexMV3OlA')">
+                <img src="https://img.youtube.com/vi/t9cexMV3OlA/0.jpg" alt="The Story of Clones Preview">
+                <p class="title">The Story of Clones</p>
+                <p class="description">A captivating short film exploring themes of adventure and self-discovery through stunning visuals and a compelling narrative, blending urban life with outdoor exploration in an 8-minute cinematic experience.</p>
+            </div>
+
+            <!-- The Beauty of Banyan Trees -->
+            <div class="video-card" onclick="openVideoModal('8gFXyEMqOoA')">
+                <img src="https://img.youtube.com/vi/8gFXyEMqOoA/0.jpg" alt="The Beauty of Banyan Trees Preview">
+                <p class="title">The Beauty of Banyan Trees</p>
+                <p class="description">This educational documentary delves into the world of plants, covering growth cycles, ecological importance, and human interactions, with beautiful footage and expert commentary in a 20-minute informative presentation.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="social-media">
+        <h2>Social Media Operations</h2>
+        
+        <h3>Instagram Accounts</h3>
+        <div class="platform-container">
+            <!-- Brain Best IG -->
+            <div class="social-card" onclick="openLink('https://www.instagram.com/brainbestbrain/')">
+                <img src="brain-profile.jpg" alt="Brain Best Logo">
+                <p class="title">Brain Best (Instagram)</p>
+                <p class="description">Managed Instagram account focused on brain health and cognitive enhancement, featuring short educational videos on memory techniques, environmental education, and mental wellness tips for all ages.</p>
+            </div>
+
+            <!-- Sustainable Family IG -->
+            <div class="social-card" onclick="openLink('https://www.instagram.com/info_sfamily/')">
+                <img src="family-profile.jpg" alt="Sustainable Family Logo">
+                <p class="title">Sustainable Family Cultural Festival (Instagram)</p>
+                <p class="description">Instagram account promoting sustainable family living and cultural festivals, sharing parent-child activities, environmental education, and SDG-focused events to connect families with eco-friendly practices and cultural values.</p>
+            </div>
+        </div>
+
+        <h3>YouTube Channels</h3>
+        <div class="platform-container">
+            <!-- Data Beauty YouTube -->
+            <div class="social-card" onclick="openLink('https://youtube.com/channel/UCsWD06peG7iINMmiLU6f4Zg?si=KUnHJt2llKwW08Si')">
+                <img src="data-beauty-profile.jpg" alt="Data Beauty Logo">
+                <p class="title">肌密教室 Data Beauty (YouTube)</p>
+                <p class="description">YouTube channel exploring beauty through data analysis, revealing skincare secrets and product effectiveness with scientific insights and educational content on cosmetics and wellness.</p>
+            </div>
+
+            <!-- Brain Best YouTube -->
+            <div class="social-card" onclick="openLink('https://www.youtube.com/@brainbestbrain')">
+                <img src="brain-best-youtube-profile.jpg" alt="Brain Best YouTube Logo">
+                <p class="title">腦Best (YouTube)</p>
+                <p class="description">YouTube channel on brain health, offering tips on memory, learning, and cognitive enhancement through scientific methods, with videos on neuroscience and mental wellness strategies.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal for PDF Viewer -->
+    <div id="pdfModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePdfModal()">&times;</span>
+            <iframe id="pdfFrame"></iframe>
+        </div>
+    </div>
+
+    <!-- Modal for Video Viewer -->
+    <div id="videoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeVideoModal()">&times;</span>
+            <iframe id="videoFrame" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <script>
+        // PDF Modal Functions
+        function openPdfModal(pdfFile) {
+            document.getElementById('pdfFrame').src = pdfFile;
+            document.getElementById('pdfModal').style.display = "block";
+        }
+
+        function closePdfModal() {
+            document.getElementById('pdfModal').style.display = "none";
+            document.getElementById('pdfFrame').src = "";
+        }
+
+        // Video Modal Functions
+        function openVideoModal(videoId) {
+            document.getElementById('videoFrame').src = `https://www.youtube.com/embed/${videoId}`;
+            document.getElementById('videoModal').style.display = "block";
+        }
+
+        function closeVideoModal() {
+            document.getElementById('videoModal').style.display = "none";
+            document.getElementById('videoFrame').src = "";
+        }
+
+        // Open Link in New Tab
+        function openLink(url) {
+            window.open(url, '_blank');
+        }
+
+        // Close modals if clicked outside
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('pdfModal')) {
+                closePdfModal();
+            }
+            if (event.target == document.getElementById('videoModal')) {
+                closeVideoModal();
+            }
+        }
+    </script>
 
 </body>
-
+</html>

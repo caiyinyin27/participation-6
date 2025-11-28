@@ -4,18 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TSOI Yan Yan – Portfolio</title>
-
-    <!-- Global CSS & D3 -->
     <link href="style.css" rel="stylesheet">
     <script src="https://d3js.org/d3.v7.min.js"></script>
-
-    <!-- Leaflet for the travel map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
     <style>
         /* ---------- Travel Map ---------- */
-        #travel-map {position:relative;margin:3rem 0;}
+        #travel-map {position:relative;margin:3rem auto; width: min(75em, 100%);}
         #map {height:70vh;width:100%;border:2px solid #0ff;border-radius:12px;}
         .legend{
             position:absolute;bottom:20px;right:20px;background:rgba(0,0,0,.85);
@@ -30,8 +25,8 @@
             border:1.5px solid #000;animation:pulse 2.5s infinite;
         }
         .legend-dot.purple{background:#FF00FF;box-shadow:0 0 10px #FF00FF;}
-        .legend-dot.blue  {background:#00FFFF;box-shadow:0 0 10px #00FFFF;}
-        .legend-dot.red   {background:#FF0000;box-shadow:0 0 10px #FF0000;}
+        .legend-dot.blue {background:#00FFFF;box-shadow:0 0 10px #00FFFF;}
+        .legend-dot.red {background:#FF0000;box-shadow:0 0 10px #FF0000;}
         @keyframes pulse{0%,100%{box-shadow:0 0 10px currentColor;}50%{box-shadow:0 0 22px currentColor;}}
         .custom-tooltip{
             background:rgba(0,0,0,.9)!important;border:1.5px solid #0ff!important;
@@ -41,9 +36,8 @@
         }
         .leaflet-tooltip-pane .leaflet-tooltip::before{border:none!important;}
         .leaflet-container{cursor:crosshair;}
-
         /* ---------- Pie Chart ---------- */
-        #pie-section{text-align:center;margin:3rem 0;}
+        #pie-section{text-align:center;margin:3rem auto; width: min(75em, 100%);}
         #pie-chart{margin:1rem auto;}
         #pie-legend{
             display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:1rem;
@@ -55,16 +49,16 @@
         #pie-legend .color{
             width:16px;height:16px;border-radius:50%;margin-right:6px;
         }
-
         /* ---------- Learning Experience Diagram ---------- */
         #learning-experience {
-            margin: 4rem 0;
+            margin: 4rem auto;
             text-align: center;
             padding: 2rem;
             background: linear-gradient(135deg, #1a1a2e, #16213e);
             border-radius: 16px;
             box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
             overflow: hidden;
+            width: min(75em, 100%);
         }
         #learning-experience h2 {
             color: #0ff;
@@ -95,10 +89,9 @@
             z-index: 1000;
             font-family: Arial, sans-serif;
         }
-
         /* ---------- Adjacency Matrix ---------- */
         #learning-matrix {
-            margin: 4rem 0;
+            margin: 4rem auto;
             padding: 2rem;
             background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
             border-radius: 16px;
@@ -106,6 +99,7 @@
             color: #0ff;
             font-family: 'Courier New', monospace;
             overflow: hidden;
+            width: min(75em, 100%);
         }
         #learning-matrix h2 {
             text-align: center;
@@ -123,6 +117,7 @@
             background: #111;
             font-size: 12px;
             min-width: 600px;
+            margin: 0 auto;
         }
         #matrix-table th, #matrix-table td {
             border: 1px solid #0ff;
@@ -194,7 +189,6 @@
             backdrop-filter: blur(4px);
             border: 1px solid #0ff;
         }
-
         .main-node, .branch-node, .elementary, .middle, .high, .college { stroke: #333; stroke-width: 2px; }
         .elementary { fill: #FF6F61; }
         .middle { fill: #6B7280; }
@@ -210,72 +204,53 @@
     </style>
 </head>
 <body>
-
-<!-- ==================== NAV ==================== -->
 <header>
     <nav id="nav">
         <ul>
             <li><p>TSOI Yan Yan</p></li>
             <li><a class="subpage" href="#grid-container">About me</a></li>
             <li><a class="subpage" href="mywork.html">My work ></a></li>
-            <li><a class="subpage" href="grid cartogram.html">streaming media ></a></li>
+            <li><a class="subpage" href="grid cartogram.html">Streaming Media ></a></li>
             <li><button id="cv" class="subpage">CV</button></li>
         </ul>
     </nav>
-
     <section class="flex-container">
         <img src="2.jpeg" alt="Portrait">
         <div class="text-container">
-            <h1>Welcome to my website!!!</h1>
-            <p>I am a student.
+            <h1>Creative Media Portfolio</h1>
+            <p>Welcome! I am TSOI Yan Yan, a Creative Media student at City University of Hong Kong.</p>
+            <p>Passionate about Data Visualization, Interactive Storytelling, and Indie Filmmaking.</p>
+            <br>
+            <p>
                 <a class="intro_button" href="https://medium.com/@caiyinyin27/topic-the-art-of-danh-vo-939483904a28/" target="_blank">
-                    Follow me on Medium >
+                    Read my Medium Articles >
                 </a>
             </p>
         </div>
     </section>
 </header>
-
-<!-- ==================== MAIN ==================== -->
 <div id="main">
-    <p>I'm a Creative Media BA student at City University of Hong Kong. Excited to connect with like-minded people! I'm really passionate about indie filmmaking, interactive storytelling, and the intersection of technology and art. I'm always looking for new perspectives and potential collaborators for fun projects. Don't hesitate to say hi — let's grab a coffee or chat about cool ideas!</p>
+    <section>
+        <p>I specialize in bridging the gap between technology and art. My portfolio showcases my journey in mastering visualization tools (D3.js, Leaflet) and creative coding. I am seeking opportunities to apply my skills in a dynamic, creative environment.</p>
+    </section>
 </div>
-
-<div class="box">
-    <div>One</div><div>Two</div><div>Three<br>first line<br>second line</div>
-</div>
-
-<section id="grid-container">
-    <div class="grid-item1">1</div>
-    <div class="grid-item2">2</div>
-    <div class="grid-item3">3</div>
-</section>
-
-<!-- ==================== HOBBIES SCATTERPLOT ==================== -->
 <section id="vis-scatterplot">
-    <h2>Hobbies Over the Years</h2>
+    <h2>Hobbies Over the Years (Interactive)</h2>
     <div id="hobbies-scatterplot"></div>
 </section>
-
-<!-- ==================== FAVORITE FOODS PIE CHART ==================== -->
 <section id="pie-section">
-    <h1>Favorite Foods Pie Chart</h1>
+    <h2>Favorite Foods Distribution</h2>
     <svg id="pie-chart" width="500" height="500"></svg>
     <div id="pie-legend"></div>
 </section>
-
-<!-- ==================== PERSONAL DATA TREE ==================== -->
 <section id="vis-personalData">
-    <h2>Education & Skills</h2>
+    <h2>Education & Skills Tree</h2>
 </section>
-
-<!-- ==================== TRAVEL MAP ==================== -->
 <section id="travel-map">
     <h2 style="text-align:center;color:#0ff;text-shadow:0 0 8px #0ff;margin:2rem 0;font-family:'Courier New',monospace;">
         My Journey: Places I've Visited
     </h2>
     <div id="map"></div>
-
     <div class="legend">
         <h4>Travel Type</h4>
         <div class="legend-item"><div class="legend-dot purple"></div><span>Attended / Lived</span></div>
@@ -283,12 +258,9 @@
         <div class="legend-item"><div class="legend-dot red"></div><span>Personal Adventure</span></div>
     </div>
 </section>
-
-<!-- ==================== LEARNING EXPERIENCE DIAGRAM ==================== -->
 <section id="learning-experience">
-    <h2>TSOI Yan Yan's Learning Experience at Different Stages</h2>
+    <h2>TSOI Yan Yan's Learning Experience (Node-Link Diagram)</h2>
     <svg id="learning-svg" width="900" height="700" viewBox="0 0 900 700" preserveAspectRatio="xMidYMid meet">
-        <!-- [Same SVG content as before - unchanged] -->
         <text class="title" x="450" y="40" style="font-size:18px;font-weight:bold;fill:#333;text-anchor:middle;">TSOI Yan Yan's Learning Experience</text>
         <circle class="main-node elementary" cx="400" cy="100" r="30" data-label="Elementary School"></circle>
         <circle class="main-node middle" cx="400" cy="250" r="30" data-label="Middle School"></circle>
@@ -363,10 +335,8 @@
     </svg>
     <div class="learning-tooltip"></div>
 </section>
-
-<!-- ==================== LEARNING EXPERIENCE ADJACENCY MATRIX ==================== -->
 <section id="learning-matrix">
-    <h2>Learning Experience Adjacency Matrix</h2>
+    <h2>Learning Experience (Adjacency Matrix)</h2>
     <div class="matrix-container">
         <div id="matrix-container"></div>
     </div>
@@ -379,52 +349,35 @@
     </div>
     <div class="matrix-tooltip"></div>
 </section>
-
-<!-- ==================== SCRIPTS ==================== -->
-
-<!-- CV button alert -->
 <script>
-    document.getElementById('cv').addEventListener('click',()=>alert('Let me tell you more about myself!'));
+    document.getElementById('cv').addEventListener('click',()=>alert('This is where my CV would be available for download!'));
 </script>
-
-<!-- Hobbies scatterplot -->
-<script src="hobbies_scatterplot.js"></script>
 <script src="scatterplot_animation.js"></script>
-
-<!-- Favorite Foods Pie Chart -->
 <script>
     document.addEventListener('DOMContentLoaded',()=>{
-
         const data = [
-            {label:'Hot Pot',  value:35},
+            {label:'Hot Pot', value:35},
             {label:'Barbecue',value:25},
-            {label:'Burgers',  value:20},
-            {label:'Pizza',    value:10},
-            {label:'Sushi',    value:10}
+            {label:'Burgers', value:20},
+            {label:'Pizza', value:10},
+            {label:'Sushi', value:10}
         ];
-
         const colors = d3.scaleOrdinal()
             .domain(data.map(d=>d.label))
             .range(['#FF5733','#36A2EB','#FFC300','#4CAF50','#9966FF']);
-
         const w = 500, h = 500, r = Math.min(w,h)/2;
-
         const svg = d3.select('#pie-chart')
             .attr('width',w).attr('height',h)
             .append('g')
             .attr('transform',`translate(${w/2},${h/2})`);
-
         const pie = d3.pie().sort(null).value(d=>d.value);
         const arc = d3.arc().innerRadius(0).outerRadius(r);
-
         const arcs = svg.selectAll('.arc')
             .data(pie(data))
             .enter().append('g').attr('class','arc');
-
         arcs.append('path')
             .attr('d',arc)
             .attr('fill',d=>colors(d.data.label));
-
         arcs.append('text')
             .attr('transform',d=>`translate(${arc.centroid(d)})`)
             .attr('dy','.35em')
@@ -433,32 +386,24 @@
             .style('fill','white')
             .style('font-weight','bold')
             .text(d=>`${d.data.value.toFixed(1)}%`);
-
         const legend = d3.select('#pie-legend');
         const items = legend.selectAll('.legend-item')
             .data(data).enter()
             .append('div').attr('class','legend-item');
-
         items.append('div')
             .attr('class','color')
             .style('background-color',d=>colors(d.label));
-
         items.append('span')
             .text(d=>`${d.label} (${d.value.toFixed(1)}%)`);
     });
 </script>
-
-<!-- Personal data tree -->
 <script src="personalData.js"></script>
-
-<!-- Travel map script -->
 <script>
     const map = L.map('map').setView([34.5,108],4.5);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
         attribution:'&copy; OpenStreetMap &copy; CARTO',
         subdomains:'abcd',maxZoom:20
     }).addTo(map);
-
     function addGlowDot(lat,lng,color,r=6,op=.95,label=''){
         const m = L.circleMarker([lat,lng],{color:'#000',weight:1.8,fillColor:color,fillOpacity:op,radius:r}).addTo(map);
         m._path.style.filter = `drop-shadow(0 0 6px ${color})`;
@@ -472,7 +417,6 @@
         }
         addGlowDot(cLat,cLng,color,11,1,label);
     }
-
     const places = {
         fujian:{lat:26.0750,lng:119.2951,label:"Fujian (Hometown)",color:'#FF00FF',density:28},
         hongkong:{lat:22.3193,lng:114.1694,label:"Hong Kong (School)",color:'#FF00FF',density:15},
@@ -495,24 +439,18 @@
         xian_red:{lat:34.3416,lng:108.9398,label:"Xi'an (Adventure)",color:'#FF0000'},
         hangzhou_red:{lat:30.2741,lng:120.1551,label:"Hangzhou (Adventure)",color:'#FF0000'}
     };
-
     addDensityCluster(places.fujian.lat,places.fujian.lng,places.fujian.color,places.fujian.density,.7,places.fujian.label);
     addDensityCluster(places.hongkong.lat,places.hongkong.lng,places.hongkong.color,places.hongkong.density,.18,places.hongkong.label);
-
     [places.xian,places.beijing,places.nanjing,places.luoyang,places.kaifeng,
      places.hangzhou,places.anyang,places.zhengzhou,places.chengdu,
      places.chongqing,places.guangzhou].forEach(p=>addGlowDot(p.lat,p.lng,p.color,7,.95,p.label));
-
     [places.guilin,places.suzhou,places.kunming,places.zhangjiajie,
      places.sanya,places.xian_red,places.hangzhou_red].forEach(p=>addGlowDot(p.lat,p.lng,p.color,7,.95,p.label));
 </script>
-
-<!-- Learning Experience Interactivity -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const nodes = document.querySelectorAll('#learning-svg .main-node, #learning-svg .branch-node');
         const tooltip = document.querySelector('.learning-tooltip');
-
         nodes.forEach(node => {
             node.addEventListener('mouseover', (e) => {
                 tooltip.style.opacity = '1';
@@ -530,8 +468,6 @@
         });
     });
 </script>
-
-<!-- Adjacency Matrix Script -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const rowHeaders = [
@@ -540,11 +476,8 @@
             "Micro-Film (High)", "Sculpture", "Photography",
             "Music", "Programming", "Computers", "Documentaries", "Micro-Films (College)"
         ];
-
         const colHeaders = ["Elementary School", "Middle School", "High School", "College"];
-
         const matrix = Array(14).fill().map(() => Array(4).fill(0));
-
         const edges = [
             { from: "Children's Painting", to: "Elementary School" },
             { from: "Dancing", to: "Elementary School" },
@@ -561,17 +494,14 @@
             { from: "Documentaries", to: "College" },
             { from: "Micro-Films (College)", to: "College" }
         ];
-
         edges.forEach(edge => {
             const i = rowHeaders.indexOf(edge.from);
             const j = colHeaders.indexOf(edge.to);
             if (i !== -1 && j !== -1) matrix[i][j] = 1;
         });
-
         const container = document.getElementById('matrix-container');
         const table = document.createElement('table');
         table.id = 'matrix-table';
-
         const headerRow = document.createElement('tr');
         headerRow.innerHTML = '<th></th>' + colHeaders.map((node, j) => {
             let cls = 'main-node';
@@ -582,14 +512,12 @@
             return `<th class="${cls}">${node}</th>`;
         }).join('');
         table.appendChild(headerRow);
-
         rowHeaders.forEach((rowNode, i) => {
             const row = document.createElement('tr');
             const rowHeader = document.createElement('th');
             rowHeader.className = 'branch-node';
             rowHeader.textContent = rowNode;
             row.appendChild(rowHeader);
-
             colHeaders.forEach((colNode, j) => {
                 const cell = document.createElement('td');
                 cell.textContent = matrix[i][j];
@@ -602,7 +530,6 @@
             table.appendChild(row);
         });
         container.appendChild(table);
-
         // Tooltip for matrix
         const tooltip = document.querySelector('.matrix-tooltip');
         document.querySelectorAll('#matrix-table td.connected').forEach(cell => {
@@ -622,6 +549,5 @@
         });
     });
 </script>
-
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99ac30493b7304d2',t:'MTc2MjUxMTc3Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
-</html>
+</body>
+</html> 

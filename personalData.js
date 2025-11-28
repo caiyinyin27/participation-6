@@ -91,8 +91,7 @@ const personalData = {
           "children": [
             {
               "name": "DSE - 22"
-            },
-          
+            }
           ]
         }
       ]
@@ -101,20 +100,23 @@ const personalData = {
 };
 
 // Responsive dimensions based on content
-const margin = { top: 600, right: 300, bottom: 40, left: 80 };
-const treeLayout = d3.tree().nodeSize([50, 250]); // Increased horizontal spacing to 250px
-const root = d3.hierarchy(educationData);
+// CHANGED: Reduced margin.top from 600 to 50 to optimize space (PDF: Resolution beats immersion)
+const margin = { top: 50, right: 300, bottom: 40, left: 80 };
+const treeLayout = d3.tree().nodeSize([50, 250]); 
+
+// BUG FIX: Changed 'educationData' (undefined) to 'personalData'
+const root = d3.hierarchy(personalData); 
 treeLayout(root);
 
 // Calculate dynamic dimensions
 const descendants = root.descendants();
 const maxDepth = root.height;
 const totalNodes = descendants.length;
-const minWidth = totalNodes * 250 + margin.left + margin.right; // Adjusted for larger nodeSize
-const minHeight = (maxDepth + 1) * 50 + margin.top + margin.bottom; // Adjusted for larger vertical spacing
+const minWidth = totalNodes * 250 + margin.left + margin.right; 
+const minHeight = (maxDepth + 1) * 50 + margin.top + margin.bottom; 
 
-const width = Math.min(minWidth, window.innerWidth * 0.9); // Cap width at 90% of viewport
-const height = Math.min(minHeight, 1200); // Cap height at 1200px
+const width = Math.min(minWidth, window.innerWidth * 0.9); 
+const height = Math.min(minHeight, 1200); 
 
 // Create SVG container
 const svg = d3.select("#vis-personalData")
@@ -156,12 +158,12 @@ nodes.append("circle")
 // Text labels with improved wrapping
 nodes.append("text")
     .attr("dy", "0.35em")
-    .attr("x", d => d.children ? -15 : 15) // Increased x offset for better spacing
+    .attr("x", d => d.children ? -15 : 15) 
     .attr("text-anchor", d => d.children ? "end" : "start")
     .text(d => d.data.name)
     .style("font-size", "10px")
     .attr("fill", "#333")
-    .call(wrap, 300); // Increased wrap width to 300px for longer labels
+    .call(wrap, 300); 
 
 // Tooltip
 const tooltip = d3.select("body").append("div")
@@ -186,13 +188,8 @@ nodes.on("mouseover", function(event, d) {
     tooltip.transition().duration(500).style("opacity", 0);
 });
 
-// Title
-svg.append("text")
-    .attr("x", width / 2)
-    .attr("y", -10)
-    .attr("text-anchor", "middle")
-    .style("font-size", "16px")
-    //.text("Education Tree");
+// Title (Commented out as h2 is in HTML)
+// svg.append("text").attr("x", width / 2).attr("y", -10)...
 
 // Text wrapping function
 function wrap(text, width) {
@@ -202,7 +199,7 @@ function wrap(text, width) {
         word,
         line = [],
         lineNumber = 0,
-        lineHeight = 1.2, // Slightly increased line height for better separation
+        lineHeight = 1.2, 
         y = text.attr("y"),
         dy = parseFloat(text.attr("dy")),
         tspan = text.text(null).append("tspan").attr("x", text.attr("x")).attr("y", y).attr("dy", dy + "em");
@@ -219,3 +216,24 @@ function wrap(text, width) {
   });
 }
 })();
+
+// ... (前面代碼不變) ...
+
+// Links (線條)
+svg.selectAll(".link")
+    // ...
+    .attr("stroke", "#333") // 深灰色線條，低調
+    .attr("stroke-width", 1.5);
+
+// Circles (節點)
+nodes.append("circle")
+    .attr("r", 6)
+    .attr("fill", "#00d1ff") // Electric Blue 節點
+    .attr("stroke", "#fff")
+    .attr("stroke-width", 1);
+
+// Text (文字)
+nodes.append("text")
+    // ...
+    .attr("fill", "#f5f5f5") // 白色文字
+    .style("font-family", "Inter, sans-serif"); // 匹配新字體

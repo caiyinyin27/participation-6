@@ -234,3 +234,30 @@
         .style("color", "#fff");
 
 })();
+
+
+// ... (前面代碼不變) ...
+
+// 修改 SVG 背景為透明或深色
+const svg = visContainer
+    .append("svg")
+    // ...
+    .style("background", "transparent") // 讓它透出 CSS 定義的漸變背景
+    .append("g")
+    // ...
+
+// 修改標題和文字顏色
+svg.append("text")
+    // ...
+    .style("fill", "#f5f5f5") // White title
+    .text("Cumulative Hobbies Over Time");
+
+// 修改坐標軸文字顏色
+svg.selectAll("text").style("fill", "#a0a0a0"); // Dimmed text
+
+// 修改顏色比例尺 (Color Scale) - 使用 Electric Blue 的變體
+const colorScale = d3.scaleOrdinal()
+    .domain(types)
+    .range(["#00d1ff", "#0088ff", "#ffffff", "#5e5ce6"]); // Electric Blue, Deep Blue, White, Purple
+
+// ... (其餘邏輯不變) ...
