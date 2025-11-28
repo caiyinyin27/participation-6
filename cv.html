@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elaine Tsoi · CV</title>
+  <style>
+    :root {
+      --bg: #05070b;
+      --card: #0c111b;
+      --text: #f5f5f5;
+      --muted: #b4bccd;
+      --accent: #00d1ff;
+      --accent-soft: rgba(0, 209, 255, 0.16);
+      --border-subtle: rgba(255, 255, 255, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+      background: radial-gradient(circle at top left, #111827 0, #020617 40%, #000 100%);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+
+    .cv-wrapper {
+      width: 100%;
+      max-width: 960px;
+      background: linear-gradient(135deg, rgba(148, 163, 184, 0.08), rgba(15, 23, 42, 0.9));
+      border-radius: 24px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      box-shadow: 0 24px 80px rgba(15, 23, 42, 0.8);
+      padding: 32px 32px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cv-wrapper::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      background: radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.32), transparent 60%),
+                  radial-gradient(circle at 100% 0%, rgba(129, 140, 248, 0.24), transparent 65%);
+      mix-blend-mode: screen;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .cv-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: flex-start;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+    }
+
+    .name-block {
+      max-width: 60%;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .tagline {
+      font-size: 0.95rem;
+      color: var(--accent);
+    }
+
+    .contact-block {
+      text-align: right;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .contact-block a {
+      color: var(--text);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .contact-block a:hover {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .contact-block div + div {
+      margin-top: 4px;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 24px;
+    }
+
+    section {
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .pill {
+      font-size: 0.7rem;
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 64, 175, 0.6));
+      white-space: nowrap;
+    }
+
+    .paragraph {
+      font-size: 0.82rem;
+      color: #e5e7eb;
+      line-height: 1.6;
+    }
+
+    .paragraph strong {
+      color: #f9fafb;
+    }
+
+    .item {
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(15, 23, 42, 0.75);
+    }
+
+    .item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      align-items: baseline;
+      margin-bottom: 4px;
+    }
+
+    .item-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .item-meta {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .item-subtitle {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    ul.bullets {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 4px;
+    }
+
+    ul.bullets li {
+      position: relative;
+      padding-left: 14px;
+      font-size: 0.8rem;
+      color: #e5e7eb;
+      line-height: 1.55;
+    }
+
+    ul.bullets li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.6em;
+      width: 6px;
+      height: 1px;
+      background: linear-gradient(to right, var(--accent), rgba(56, 189, 248, 0.1));
+    }
+
+    .two-col-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4px 16px;
+    }
+
+    .two-col-list span {
+      font-size: 0.8rem;
+      color: #e5e7eb;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .badge {
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      border: 1px solid rgba(56, 189, 248, 0.9);
+      color: #e0faff;
+    }
+
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 6px;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(148, 163, 184, 0.4);
+    }
+
+    .footer-row span {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 800px) {
+      .cv-wrapper {
+        padding: 20px 16px 16px;
+        border-radius: 18px;
+      }
+
+      header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: left;
+      }
+
+      .name-block {
+        max-width: 100%;
+      }
+
+      .contact-block {
+        text-align: left;
+      }
+
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cv-wrapper">
+    <div class="cv-inner">
+      <header>
+        <div class="name-block">
+          <h1>Elaine Tsoi / TSOI Yan&nbsp;Yan</h1>
+          <div class="subtitle">Multimedia Advertising Creator · Creative Media BA</div>
+          <p class="tagline">Crafting stories across visuals, brands, and emotions — from campaign planning to moving images.</p>
+        </div>
+        <div class="contact-block">
+          
+          <div>Email: <a href="mailto:caiyinyin27@gmail.com">caiyinyin27@gmail.com</a></div>
+          <div>Phone: +852 6069 4090</div>
+          
+          <div>LinkedIn / IG: @tsoiyanyan</div>
+        </div>
+      </header>
+
+      <main>
+        <!-- LEFT COLUMN -->
+        <div>
+          <section>
+            <h2>Profile</h2>
+            <p class="paragraph">
+              I am a <strong>Multimedia Advertising Creator</strong> studying <strong>Creative Media BA at City University of Hong Kong</strong>.
+              I enjoy turning data, everyday observations, and city stories into <strong>strategic, emotionally driven advertising</strong>.
+              My practice spans <strong>advertising planning, social media content, video editing, photography, and UI design</strong>,
+              with a visual style that emphasises <strong>light &amp; shadow, optimism, and human connection</strong>.
+            </p>
+          </section>
+
+          <section>
+            <h2>Education</h2>
+            <div class="item">
+              <div class="item-header">
+                <div class="item-title">Kowloon Tong Heung To Secondary School</div>
+                <div class="item-meta">Hong Kong · 2017 – 2023</div>
+              </div>
+            </div>
+
+            <div class="item">
+              <div class="item-header">
+                <div class="item-title">HKU SPACE</div>
+                <div class="item-meta">Hong Kong · 2023 – 2024</div>
+              </div>
+            </div>
+
+            <div class="item">
+              <div class="item-header">
+                <div class="item-title">City University of Hong Kong — School of Creative Media</div>
+                <div class="item-meta">Hong Kong · 2025 – 2027</div>
+              </div>
+              <div class="item-subtitle">Bachelor of Arts in Creative Media</div>
+              <ul class="bullets">
+                <li>Relevant courses: Advertising &amp; Branding, Interactive Storytelling, Word · Sound · Image, Digital Video Production.</li>
+                <li>Focus on <strong>multimedia storytelling, visual communication, and advertising strategy</strong>.</li>
+              </ul>
+            </div>
+          </section>
+
+          <section>
+            <h2>Experience &amp; Projects</h2>
+
+            <div class="item">
+              <div class="item-header">
+                <div class="item-title">Advertising Campaign Projects (Student / Personal)</div>
+                <div class="item-meta">2023 – 2025</div>
+              </div>
+              <div class="item-subtitle">Multimedia Advertising Creator · Concept to execution</div>
+              <ul class="bullets">
+                <li>Planned integrated campaigns for brands such as <strong>Dyson, Samsung, Lee Kum Kee, Doughnut backpack</strong> (concept projects).</li>
+                <li>Developed <strong>brand positioning, USP, target audience personas, and media touchpoint maps</strong> for each campaign.</li>
+                <li>Produced <strong>social media posts, key visual mockups, and short video storyboards</strong> to visualise campaign ideas.</li>
+                <li>Presented ideas through <strong>high-tech, premium style slide decks</strong> highlighting both strategic thinking and visual craft.</li>
+              </ul>
+            </div>
+
+            <div class="item">
+              <div class="item-header">
+                <div class="item-title">Urban Back Alley Photo Exhibition (Group Project)</div>
+                <div class="item-meta">2024</div>
+              </div>
+              <div class="item-subtitle">Curator · Visual researcher · Exhibition designer</div>
+              <ul class="bullets">
+                <li>Co-curated an exhibition on <strong>Hong Kong back-alley culture and micro-economies</strong>, featuring works by Fan Ho, Michael Wolf, Ties van Brussel, and Leo Hon&nbsp;Li.</li>
+                <li>Researched <strong>urban renewal, informal labour, and hidden “gap spaces”</strong> to build the exhibition narrative.</li>
+                <li>Designed <strong>collage-style boards, artefact labels, and spatial storytelling</strong> using sound, light, and projection.</li>
+              </ul>
+            </div>
+
+            <div class="item">
+              <div class="item-header">
+                <div class="item-title">"Wild Banyan Trees" Documentary / Photo Project</div>
+                <div class="item-meta">2024</div>
+              </div>
+              <div class="item-subtitle">Director · Cinematographer · Editor</div>
+              <ul class="bullets">
+                <li>Planned and shot a short documentary about <strong>wild banyan trees</strong> in Hong Kong’s unmanaged natural spaces.</li>
+                <li>Handled <strong>location scouting, shot list / storyboard, voice-over script, and on-site sound recording</strong>.</li>
+                <li>Edited footage with focus on <strong>rhythm, mood, and the relationship between city and nature</strong>.</li>
+              </ul>
+            </div>
+          </section>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div>
+          <section>
+            <h2>Core Skills</h2>
+            <div class="item">
+              <div class="item-subtitle">Advertising &amp; Strategy</div>
+              <ul class="bullets">
+                <li>Advertising planning &amp; campaign structure</li>
+                <li>Brand storytelling &amp; positioning</li>
+                <li>Creative concept development &amp; copywriting</li>
+              </ul>
+            </div>
+            <div class="item">
+              <div class="item-subtitle">Content &amp; Production</div>
+              <ul class="bullets">
+                <li>Social media content planning &amp; account operation</li>
+                <li>Video shooting &amp; editing (short-form / social)</li>
+                <li>Photography: urban, street, portrait, documentary</li>
+              </ul>
+            </div>
+            <div class="item">
+              <div class="item-subtitle">Design &amp; Digital</div>
+              <ul class="bullets">
+                <li>Graphic design &amp; layout for campaigns</li>
+                <li>UI design for simple websites / landing pages</li>
+                <li>Basic data visualisation &amp; information graphics</li>
+              </ul>
+            </div>
+          </section>
+
+          <section>
+            <h2>Tools</h2>
+            <div class="two-col-list">
+              <span>Adobe Premiere Pro</span>
+              <span>Adobe After Effects (basic)</span>
+              <span>Adobe Photoshop</span>
+              <span>Adobe Illustrator</span>
+              <span>Lightroom</span>
+              <span>Figma / XD</span>
+              <span>Canva / social media tools</span>
+              <span>Gamma &amp; other AI tools</span>
+            </div>
+          </section>
+
+          <section>
+            <h2>Additional Experience</h2>
+            <div class="item">
+              <div class="item-subtitle">On-camera &amp; Brand Ambassador Skills</div>
+              <ul class="bullets">
+                <li>Comfortable speaking on camera for <strong>product demos, campaign intros, and behind-the-scenes content</strong>.</li>
+                <li>Experience crafting <strong>personal branding visuals</strong> that match high-tech, premium brand styles.</li>
+              </ul>
+            </div>
+          </section>
+
+          <section>
+            <h2>Awards &amp; Activities</h2>
+            <div class="item">
+              <ul class="bullets">
+                <li>School / course project showcases in <strong>advertising, photography, and interactive media</strong>. (Details available in portfolio.)</li>
+                <li>Active participation in <strong>creative/media-related clubs, exhibitions, and workshops</strong>.</li>
+              </ul>
+            </div>
+          </section>
+
+          <section>
+            <h2>Languages</h2>
+            <div class="badge-row">
+              <span class="badge">Cantonese · Native</span>
+              <span class="badge">Mandarin · Fluent</span>
+              <span class="badge">English · Normal</span>
+            </div>
+          </section>
+
+          <section>
+            <h2>Personal</h2>
+            <p class="paragraph">
+              Personality: <strong>optimistic, curious, outgoing, and diligent</strong>.
+              I enjoy exploring <strong>city back alleys, everyday stories, and nature</strong>, and translating them into visual narratives.
+              Always hungry to experiment with new tools, aesthetics, and storytelling formats.
+            </p>
+          </section>
+        </div>
+      </main>
+
+      <div class="footer-row">
+        <span>CV — updated for Multimedia / Advertising roles</span>
+        <span>Full portfolio and references available upon request</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
