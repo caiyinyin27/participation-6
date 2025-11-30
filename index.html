@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <!-- 可视化相关内联样式（地图 / 饼图 / 学习经历图 / 矩阵） -->
+    <!-- 可视化相关内联样式（地图 / 饼图 / 学习经历图 / 矩阵 / 新增图表） -->
     <style>
         /* ---------- Travel Map ---------- */
         #travel-map {
@@ -117,7 +117,7 @@
             margin-right:6px;
         }
 
-        /* ---------- Learning Experience Diagram ---------- */
+        /* ---------- Node-Link Diagram Wrapper ---------- */
         #learning-experience {
             margin: 4rem auto;
             text-align: center;
@@ -127,6 +127,7 @@
             box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
             overflow: hidden;
             width: min(75em, 100%);
+            position: relative;
         }
         #learning-experience h2 {
             color: #0ff;
@@ -135,27 +136,103 @@
             margin-bottom: 1.5rem;
         }
         #learning-svg {
-            background: white;
-            border: 1px solid #ccc;
+            background: #020617;
+            border: 1px solid #0ff;
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 0 25px rgba(0,255,255,0.25);
             max-width: 100%;
             height: auto;
         }
         .learning-tooltip {
             position: absolute;
-            background-color: #333;
-            color: white;
+            background-color: rgba(0,0,0,0.9);
+            color: #0ff;
             padding: 8px 12px;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 12px;
             pointer-events: none;
             opacity: 0;
             transition: opacity 0.2s;
-            max-width: 200px;
+            max-width: 220px;
             text-align: center;
             z-index: 1000;
-            font-family: Arial, sans-serif;
+            font-family: 'Courier New', monospace;
+            border: 1px solid #0ff;
+            text-shadow: 0 0 6px #0ff;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Node-link styles */
+        .skill-link {
+            stroke: rgba(148,163,184,0.7);
+            stroke-width: 2;
+        }
+        .skill-node-core {
+            fill: #00ffff;
+            stroke: #e0f2fe;
+            stroke-width: 2;
+            filter: drop-shadow(0 0 10px rgba(34,211,238,0.9));
+        }
+        .skill-node-cluster {
+            fill: #1d4ed8;
+            stroke: #93c5fd;
+            stroke-width: 1.8;
+            filter: drop-shadow(0 0 8px rgba(59,130,246,0.9));
+        }
+        .skill-node-leaf {
+            fill: #f97316;
+            stroke: #fed7aa;
+            stroke-width: 1.4;
+            filter: drop-shadow(0 0 6px rgba(249,115,22,0.9));
+        }
+        .skill-label {
+            fill: #e5e7eb;
+            font-size: 11px;
+            text-shadow: 0 0 6px #000;
+        }
+
+        /* Node-link legend */
+        .skill-legend{
+            display:flex;
+            flex-wrap:wrap;
+            justify-content:center;
+            gap:12px;
+            margin-top:1rem;
+            font-size:13px;
+        }
+        .skill-legend-item{
+            display:flex;
+            align-items:center;
+            background:rgba(0,255,255,0.08);
+            border-radius:999px;
+            padding:6px 12px;
+            border:1px solid rgba(148,163,184,0.7);
+            color:#e5e7eb;
+        }
+        .skill-legend-dot{
+            width:14px;
+            height:14px;
+            border-radius:50%;
+            margin-right:8px;
+        }
+        .skill-legend-dot.core{
+            background:#00ffff;
+            box-shadow:0 0 10px #22d3ee;
+        }
+        .skill-legend-dot.cluster{
+            background:#1d4ed8;
+            box-shadow:0 0 10px #3b82f6;
+        }
+        .skill-legend-dot.leaf{
+            background:#f97316;
+            box-shadow:0 0 10px #fb923c;
+        }
+        .skill-legend-line{
+            width:26px;
+            height:4px;
+            border-radius:10px;
+            margin-right:8px;
+            background:linear-gradient(90deg,#9ca3af,#e5e7eb);
         }
 
         /* ---------- Adjacency Matrix ---------- */
@@ -169,6 +246,7 @@
             font-family: 'Courier New', monospace;
             overflow: hidden;
             width: min(75em, 100%);
+            position: relative;
         }
         #learning-matrix h2 {
             text-align: center;
@@ -183,9 +261,9 @@
         }
         #matrix-table {
             border-collapse: collapse;
-            background: #111;
+            background: #020617;
             font-size: 12px;
-            min-width: 600px;
+            min-width: 700px;
             margin: 0 auto;
         }
         #matrix-table th,
@@ -193,13 +271,14 @@
             border: 1px solid #0ff;
             padding: 10px;
             text-align: center;
-            min-width: 60px;
+            min-width: 70px;
         }
         #matrix-table th {
             background: rgba(0, 255, 255, 0.1);
             font-weight: bold;
             color: #0ff;
             text-shadow: 0 0 5px #0ff;
+            cursor: pointer;
         }
         #matrix-table td {
             color: #fff;
@@ -209,11 +288,6 @@
         #matrix-table td.connected:hover{
             transform: scale(1.05);
         }
-        .main-node { font-weight: bold; }
-        .elementary { background: #FF6F61 !important; color: white; }
-        .middle     { background: #6B7280 !important; color: white; }
-        .high       { background: #10B981 !important; color: white; }
-        .college    { background: #3B82F6 !important; color: white; }
         .branch-node{ background: #FBBF24 !important; color: #333; }
         .connected {
             background: #00ff88 !important;
@@ -263,31 +337,119 @@
             backdrop-filter: blur(4px);
             border: 1px solid #0ff;
         }
-        .main-node, .branch-node,
-        .elementary, .middle, .high, .college {
-            stroke: #333;
-            stroke-width: 2px;
+        .row-highlight th,
+        .row-highlight td {
+            background: rgba(56,189,248,0.25) !important;
         }
-        .elementary { fill: #FF6F61; }
-        .middle     { fill: #6B7280; }
-        .high       { fill: #10B981; }
-        .college    { fill: #3B82F6; }
-        .branch-node{
-            fill: #FBBF24;
-            stroke: #333;
-            stroke-width: 1px;
+        .col-highlight {
+            background: rgba(244,114,182,0.22) !important;
         }
-        .node-label {
-            font-size: 12px;
-            fill: #333;
-            text-anchor: middle;
-            dominant-baseline: middle;
+        .matrix-legend-conn {
+            background: #00ff88 !important;
+            color: #000;
         }
-        .link        { stroke: #666; stroke-width: 2px; fill: none; }
-        .branch-link { stroke: #999; stroke-width: 1px; fill: none; }
-        .arrowhead   { fill: #666; }
-        .legend-text { font-size: 12px; fill: #333; }
-        .legend-node { stroke: #333; stroke-width: 1px; }
+
+        /* ---------- 新增：广告能力统计图表 ---------- */
+        #ad-bar-section,
+        #ad-radar-section {
+            margin: 4rem auto;
+            width: min(75em, 100%);
+            text-align: center;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+            background: radial-gradient(circle at top, rgba(0,255,255,0.15), rgba(0,0,0,0.9));
+        }
+        #ad-bar-section h2,
+        #ad-radar-section h2 {
+            color: #0ff;
+            text-shadow: 0 0 12px #0ff;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 1.2rem;
+        }
+        .section-intro {
+            max-width: 52rem;
+            margin: 0 auto 1.5rem;
+            font-size: 0.96rem;
+            color: #cfd9ff;
+            line-height: 1.6;
+        }
+        #ad-bar-chart,
+        #ad-radar-chart {
+            display: block;
+            margin: 2rem auto 0;
+            max-width: 800px;
+            width: 100%;
+            height: auto;
+            border-radius: 14px;
+            border: 1px solid rgba(0,255,255,0.4);
+            box-shadow: 0 0 25px rgba(0,255,255,0.25);
+            background: radial-gradient(circle at top, #07101f, #020308);
+        }
+        .chart-label {
+            font-size: 11px;
+            fill: #e5ecff;
+        }
+        .axis path,
+        .axis line {
+            stroke: rgba(255,255,255,0.2);
+        }
+        .axis text {
+            fill: #e5ecff;
+            font-size: 11px;
+        }
+        .radar-grid-line {
+            stroke: rgba(255,255,255,0.12);
+            stroke-width: 1;
+        }
+        .radar-axis-line {
+            stroke: rgba(0,255,255,0.45);
+            stroke-width: 1.3;
+        }
+        .radar-label {
+            fill: #e5ecff;
+            font-size: 11px;
+            text-shadow: 0 0 6px #000;
+        }
+        .radar-area {
+            fill: rgba(0,255,255,0.22);
+            stroke: #00ffff;
+            stroke-width: 2.2;
+            filter: drop-shadow(0 0 10px rgba(0,255,255,0.8));
+        }
+        .radar-dot {
+            fill: #ff00ff;
+            stroke: #fff;
+            stroke-width: 1;
+            filter: drop-shadow(0 0 8px rgba(255,0,255,0.9));
+        }
+
+        /* ---------- Contact section ---------- */
+        #contact {
+            margin: 4rem auto;
+            padding: 2.5rem 2rem;
+            width: min(60em, 100%);
+            text-align: center;
+            border-radius: 16px;
+            background: radial-gradient(circle at top, rgba(56,189,248,0.18), rgba(15,23,42,0.95));
+            box-shadow: 0 0 30px rgba(56,189,248,0.4);
+            color: #e5ecff;
+        }
+        #contact h2 {
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff;
+            margin-bottom: 1rem;
+        }
+        #contact p {
+            margin: 0.4rem 0;
+        }
+        #contact a {
+            color: #22d3ee;
+            text-decoration: none;
+        }
+        #contact a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -298,6 +460,7 @@
             <li><a class="subpage" href="#about">About me</a></li>
             <li><a class="subpage" href="#data-stories">Data stories</a></li>
             <li><a class="subpage" href="mywork.html">Portfolio</a></li>
+            <li><a class="subpage" href="#contact">Contact</a></li>
             <li><button id="cv" class="subpage nav-cv">CV (PDF)</button></li>
         </ul>
     </nav>
@@ -317,8 +480,8 @@
             </p>
             <p>
                 This site is designed as a <strong>mock job interview portfolio</strong> for multimedia / advertising roles:
-                it gives an overview of who I am, then lets you explore my data stories, travel history, and learning
-                journey in more detail.
+                it gives an overview of who I am, then lets you explore my data stories, travel history, and skill
+                networks in more detail.
             </p>
             <p class="hero-links">
                 <a class="intro_button" href="https://medium.com/@caiyinyin27" target="_blank">
@@ -375,7 +538,7 @@
         <h2>Data Stories About Me</h2>
         <p class="section-intro">
             Following the principle of “overview first, details on demand”, this section gives an overview of my
-            <strong>hobbies, preferences, learning experience, and travel</strong> through interactive visualizations.
+            <strong>hobbies, preferences, skills, and travel</strong> through interactive visualizations.
         </p>
         <p class="section-intro">
             Each visualization focuses on one aspect of who I am — you can read it quickly in an interview context,
@@ -393,7 +556,7 @@
         <div id="hobbies-scatterplot"></div>
     </section>
 
-    <!-- UPDATED PIE SECTION: Advertising skills instead of favorite foods -->
+    <!-- Advertising skills pie -->
     <section id="pie-section" class="reveal">
         <h2>My Advertising Skills (Pie Chart)</h2>
         <p class="section-intro">
@@ -405,138 +568,63 @@
         <div id="pie-legend"></div>
     </section>
 
-    <section id="vis-personalData" class="reveal">
-        <h2>Education & Skills Tree (Node-Link Diagram)</h2>
+    <!-- NEW: Advertising Skill Depth (Bar Chart) -->
+    <section id="ad-bar-section" class="reveal">
+        <h2>Advertising Skill Depth (Bar Chart)</h2>
         <p class="section-intro">
-            This node-link diagram maps my learning journey from <strong>elementary</strong> to
-            <strong>college</strong>, showing how different activities — children’s painting, Latin dance,
-            micro-film, programming, etc. — connect to each stage.
+            This bar chart shows how confident I am in each advertising-related area on a scale from 0 to 10.
+            It highlights my strengths in <strong>strategy, storytelling, social media, and video advertising</strong>.
         </p>
+        <svg id="ad-bar-chart"></svg>
     </section>
 
-    
-    <section id="learning-experience" class="reveal">
-        <h2>Learning Experience (Node-Link Overview)</h2>
+    <!-- NEW: Creative vs Strategic Profile (Radar Chart) -->
+    <section id="ad-radar-section" class="reveal">
+        <h2>Creative vs Strategic Profile (Radar Chart)</h2>
         <p class="section-intro">
-            This diagram gives a structural overview of my education and creative subjects.
-            In the reflection, I will compare this to the matrix below and explain why different structures
-            highlight different patterns in the same data.
+            This radar chart shows how I balance <strong>strategic thinking</strong> and <strong>creative execution</strong>
+            across six dimensions: strategy, concept, execution, data, collaboration and presentation.
         </p>
-        <svg id="learning-svg" width="900" height="700" viewBox="0 0 900 700" preserveAspectRatio="xMidYMid meet">
-            <text class="title" x="450" y="40" style="font-size:18px;font-weight:bold;fill:#333;text-anchor:middle;">
-                TSOI Yan Yan's Learning Experience
-            </text>
-            <!-- Main nodes -->
-            <circle class="main-node elementary" cx="400" cy="100" r="30" data-label="Elementary School"></circle>
-            <circle class="main-node middle"     cx="400" cy="250" r="30" data-label="Middle School"></circle>
-            <circle class="main-node high"       cx="400" cy="400" r="30" data-label="High School"></circle>
-            <circle class="main-node college"    cx="400" cy="550" r="30" data-label="College"></circle>
-
-            <!-- Branch nodes -->
-            <circle class="branch-node" cx="300" cy="80"  r="15" data-label="Children's Painting"></circle>
-            <circle class="branch-node" cx="300" cy="120" r="15" data-label="Dancing"></circle>
-            <circle class="branch-node" cx="500" cy="100" r="15" data-label="Singing"></circle>
-
-            <circle class="branch-node" cx="300" cy="230" r="15" data-label="Latin Dance"></circle>
-            <circle class="branch-node" cx="300" cy="270" r="15" data-label="Sketching"></circle>
-            <circle class="branch-node" cx="500" cy="250" r="15" data-label="Watercolor"></circle>
-
-            <circle class="branch-node" cx="300" cy="380" r="15" data-label="Micro-Film"></circle>
-            <circle class="branch-node" cx="300" cy="420" r="15" data-label="Sculpture"></circle>
-            <circle class="branch-node" cx="500" cy="400" r="15" data-label="Photography"></circle>
-
-            <circle class="branch-node" cx="300" cy="510" r="15" data-label="Music"></circle>
-            <circle class="branch-node" cx="300" cy="550" r="15" data-label="Programming"></circle>
-            <circle class="branch-node" cx="300" cy="590" r="15" data-label="Computers"></circle>
-            <circle class="branch-node" cx="500" cy="530" r="15" data-label="Documentaries"></circle>
-            <circle class="branch-node" cx="500" cy="570" r="15" data-label="Micro-Films"></circle>
-
-            <!-- Labels -->
-            <text class="node-label" x="400" y="100">Elementary</text>
-            <text class="node-label" x="400" y="250">Middle</text>
-            <text class="node-label" x="400" y="400">High</text>
-            <text class="node-label" x="400" y="550">College</text>
-
-            <text class="node-label" x="300" y="80"  style="font-size:10px">Painting</text>
-            <text class="node-label" x="300" y="120" style="font-size:10px">Dancing</text>
-            <text class="node-label" x="500" y="100" style="font-size:10px">Singing</text>
-            <text class="node-label" x="300" y="230" style="font-size:10px">Latin Dance</text>
-            <text class="node-label" x="300" y="270" style="font-size:10px">Sketching</text>
-            <text class="node-label" x="500" y="250" style="font-size:10px">Watercolor</text>
-            <text class="node-label" x="300" y="380" style="font-size:10px">Micro-Film</text>
-            <text class="node-label" x="300" y="420" style="font-size:10px">Sculpture</text>
-            <text class="node-label" x="500" y="400" style="font-size:10px">Photography</text>
-            <text class="node-label" x="300" y="510" style="font-size:10px">Music</text>
-            <text class="node-label" x="300" y="550" style="font-size:10px">Programming</text>
-            <text class="node-label" x="300" y="590" style="font-size:10px">Computers</text>
-            <text class="node-label" x="500" y="530" style="font-size:10px">Documentaries</text>
-            <text class="node-label" x="500" y="570" style="font-size:10px">Micro-Films</text>
-
-            <!-- Edges -->
-            <path class="link" d="M400,130 L400,220" marker-end="url(#arrow)"></path>
-            <path class="link" d="M400,280 L400,370" marker-end="url(#arrow)"></path>
-            <path class="link" d="M400,430 L400,520" marker-end="url(#arrow)"></path>
-
-            <path class="branch-link" d="M400,100 L300,80"></path>
-            <path class="branch-link" d="M400,100 L300,120"></path>
-            <path class="branch-link" d="M400,100 L500,100"></path>
-
-            <path class="branch-link" d="M400,250 L300,230"></path>
-            <path class="branch-link" d="M400,250 L300,270"></path>
-            <path class="branch-link" d="M400,250 L500,250"></path>
-
-            <path class="branch-link" d="M400,400 L300,380"></path>
-            <path class="branch-link" d="M400,400 L300,420"></path>
-            <path class="branch-link" d="M400,400 L500,400"></path>
-
-            <path class="branch-link" d="M400,550 L300,510"></path>
-            <path class="branch-link" d="M400,550 L300,550"></path>
-            <path class="branch-link" d="M400,550 L300,590"></path>
-            <path class="branch-link" d="M400,550 L500,530"></path>
-            <path class="branch-link" d="M400,550 L500,570"></path>
-
-            <!-- Legend -->
-            <rect x="700" y="100" width="150" height="140" fill="white" stroke="#ccc" stroke-width="1"/>
-            <text class="legend-text" x="710" y="120" style="font-weight:bold">Legend</text>
-            <circle class="legend-node elementary" cx="720" cy="140" r="10"></circle>
-            <text class="legend-text" x="740" y="140">Elementary School</text>
-            <circle class="legend-node middle" cx="720" cy="160" r="10"></circle>
-            <text class="legend-text" x="740" y="160">Middle School</text>
-            <circle class="legend-node high" cx="720" cy="180" r="10"></circle>
-            <text class="legend-text" x="740" y="180">High School</text>
-            <circle class="legend-node college" cx="720" cy="200" r="10"></circle>
-            <text class="legend-text" x="740" y="200">College</text>
-            <circle class="legend-node branch-node" cx="720" cy="220" r="10"></circle>
-            <text class="legend-text" x="740" y="220">Subjects</text>
-
-            <defs>
-                <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5"
-                        markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                    <path d="M 0 0 L 10 5 L 0 10 z" class="arrowhead" />
-                </marker>
-            </defs>
-        </svg>
-        <div class="learning-tooltip"></div>
+        <svg id="ad-radar-chart"></svg>
     </section>
 
+    <!-- NEW Matrix -->
     <section id="learning-matrix" class="reveal">
-        <h2>Learning Experience (Adjacency Matrix)</h2>
+        <h2>Projects × Skills (Adjacency Matrix)</h2>
         <p class="section-intro">
-            The adjacency matrix below encodes the same data as the node-link diagram, but in a different form.
-            It makes it easier to compare which school stages connect to the most activities, and can be used
-            to discuss “eyes over memory” and how layout affects pattern recognition.
+            This matrix shows which <strong>skills</strong> were used in each of my key <strong>projects</strong>.
+            Hover a glowing square to see the pair, or click a row / column label to highlight connections.
         </p>
         <div class="matrix-container">
             <div id="matrix-container"></div>
         </div>
         <div class="matrix-legend">
-            <div class="matrix-legend-item"><div class="legend-circle elementary"></div> Elementary</div>
-            <div class="matrix-legend-item"><div class="legend-circle middle"></div> Middle</div>
-            <div class="matrix-legend-item"><div class="legend-circle high"></div> High</div>
-            <div class="matrix-legend-item"><div class="legend-circle college"></div> College</div>
-            <div class="matrix-legend-item"><div class="legend-circle branch-node"></div> Subjects</div>
+            <div class="matrix-legend-item">
+                <div class="legend-circle matrix-legend-conn"></div> Skill used in this project
+            </div>
+            <div class="matrix-legend-item">
+                <div class="legend-circle" style="background:#38bdf8;"></div> Highlighted project row
+            </div>
+            <div class="matrix-legend-item">
+                <div class="legend-circle" style="background:#f472b6;"></div> Highlighted skill column
+            </div>
         </div>
         <div class="matrix-tooltip"></div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="reveal">
+        <h2>Contact / Get in Touch</h2>
+        <p class="section-intro">
+            If you are interested in my work or would like to discuss internship or junior creative opportunities,
+            feel free to reach out directly.
+        </p>
+        <p><strong>Name:</strong> TSOI Yan Yan (Elaine Tsoi)</p>
+        <p><strong>Mobile:</strong> <a href="tel:+85260694090">6069 4090</a></p>
+        <p><strong>Email:</strong> <a href="mailto:caiyinyin27@gmail.com">caiyinyin27@gmail.com</a></p>
+        <p style="margin-top:1rem;">
+            I’m happy to share more project files, process notes, or discuss how I can support your team.
+        </p>
     </section>
 </main>
 
@@ -616,7 +704,375 @@
     });
 </script>
 
-<script src="personalData.js"></script>
+<!-- NEW: Advertising Skill Depth (Bar Chart) + Creative vs Strategic Radar -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        /* -------- Bar chart: Advertising Skill Depth -------- */
+        const barData = [
+            { label: 'Campaign Strategy',   value: 9 },
+            { label: 'Brand Storytelling',  value: 9 },
+            { label: 'Social Media Content',value: 8.5 },
+            { label: 'Video Advertising',   value: 8 },
+            { label: 'Data Visualisation',  value: 7.5 },
+            { label: 'UI / Visual Design',  value: 7 }
+        ];
+
+        const barSvg = d3.select('#ad-bar-chart')
+            .attr('viewBox', '0 0 800 420')
+            .append('g')
+            .attr('transform', 'translate(80,40)');
+
+        const barWidth  = 800 - 80 - 60;
+        const barHeight = 420 - 40 - 80;
+
+        const xScale = d3.scaleBand()
+            .domain(barData.map(d => d.label))
+            .range([0, barWidth])
+            .padding(0.25);
+
+        const yScale = d3.scaleLinear()
+            .domain([0, 10])
+            .range([barHeight, 0])
+            .nice();
+
+        // Neon gradient for bars
+        const barDefs = barSvg.append('defs');
+        const barGradient = barDefs.append('linearGradient')
+            .attr('id', 'barGradient')
+            .attr('x1', '0%')
+            .attr('y1', '100%')
+            .attr('x2', '0%')
+            .attr('y2', '0%');
+        barGradient.append('stop').attr('offset', '0%').attr('stop-color', '#09203f');
+        barGradient.append('stop').attr('offset', '50%').attr('stop-color', '#00ffff');
+        barGradient.append('stop').attr('offset', '100%').attr('stop-color', '#ff00ff');
+
+        // Axes
+        barSvg.append('g')
+            .attr('class', 'axis')
+            .attr('transform', `translate(0,${barHeight})`)
+            .call(d3.axisBottom(xScale))
+            .selectAll('text')
+            .attr('transform', 'rotate(-25)')
+            .style('text-anchor', 'end')
+            .style('font-size','10px');
+
+        barSvg.append('g')
+            .attr('class', 'axis')
+            .call(d3.axisLeft(yScale).ticks(5));
+
+        // Glow filter
+        const filter = barDefs.append('filter')
+            .attr('id', 'barGlow');
+        filter.append('feGaussianBlur')
+            .attr('stdDeviation', '3')
+            .attr('result', 'coloredBlur');
+        const feMerge = filter.append('feMerge');
+        feMerge.append('feMergeNode').attr('in', 'coloredBlur');
+        feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
+
+        // Bars with animation
+        barSvg.selectAll('.bar')
+            .data(barData)
+            .enter()
+            .append('rect')
+            .attr('class', 'bar')
+            .attr('x', d => xScale(d.label))
+            .attr('width', xScale.bandwidth())
+            .attr('y', barHeight)
+            .attr('height', 0)
+            .attr('fill', 'url(#barGradient)')
+            .style('filter', 'url(#barGlow)')
+            .transition()
+            .duration(800)
+            .delay((d,i) => i * 120)
+            .attr('y', d => yScale(d.value))
+            .attr('height', d => barHeight - yScale(d.value));
+
+        // Value labels
+        barSvg.selectAll('.bar-label')
+            .data(barData)
+            .enter()
+            .append('text')
+            .attr('class', 'chart-label')
+            .attr('x', d => xScale(d.label) + xScale.bandwidth()/2)
+            .attr('y', d => yScale(d.value) - 8)
+            .attr('text-anchor', 'middle')
+            .style('opacity', 0)
+            .text(d => d.value.toFixed(1))
+            .transition()
+            .duration(600)
+            .delay((d,i) => 500 + i * 120)
+            .style('opacity', 1);
+
+        /* -------- Radar chart: Creative vs Strategic Profile -------- */
+        const radarData = [
+            { axis: 'Strategy',      value: 9 },
+            { axis: 'Concept',       value: 8.5 },
+            { axis: 'Execution',     value: 8 },
+            { axis: 'Data Insight',  value: 7.5 },
+            { axis: 'Collaboration', value: 8.5 },
+            { axis: 'Presentation',  value: 8.8 }
+        ];
+
+        const radarSvg = d3.select('#ad-radar-chart')
+            .attr('viewBox', '0 0 800 420')
+            .append('g')
+            .attr('transform', 'translate(400,210)');
+
+        const radarLevels = 4;
+        const radarMax = 10;
+        const radarRadius = 150;
+        const angleSlice = (Math.PI * 2) / radarData.length;
+
+        const rScale = d3.scaleLinear()
+            .domain([0, radarMax])
+            .range([0, radarRadius]);
+
+        // Grid circles
+        for (let lvl = 1; lvl <= radarLevels; lvl++) {
+            radarSvg.append('circle')
+                .attr('class', 'radar-grid-line')
+                .attr('r', radarRadius * (lvl / radarLevels))
+                .attr('fill', 'none');
+        }
+
+        // Axis lines + labels
+        radarData.forEach((d, i) => {
+            const angle = angleSlice * i - Math.PI/2;
+            const x = Math.cos(angle) * radarRadius;
+            const y = Math.sin(angle) * radarRadius;
+
+            radarSvg.append('line')
+                .attr('class', 'radar-axis-line')
+                .attr('x1', 0)
+                .attr('y1', 0)
+                .attr('x2', x)
+                .attr('y2', y);
+
+            const labelOffset = 18;
+            const lx = Math.cos(angle) * (radarRadius + labelOffset);
+            const ly = Math.sin(angle) * (radarRadius + labelOffset);
+
+            radarSvg.append('text')
+                .attr('class', 'radar-label')
+                .attr('x', lx)
+                .attr('y', ly)
+                .attr('text-anchor', lx >= 0 ? 'start' : 'end')
+                .attr('dy', '0.35em')
+                .text(d.axis);
+        });
+
+        // Radar area path
+        const radarLine = d3.lineRadial()
+            .radius(d => rScale(d.value))
+            .angle((d,i) => i * angleSlice)
+            .curve(d3.curveCardinalClosed);
+
+        const radarPath = radarSvg.append('path')
+            .datum(radarData)
+            .attr('class', 'radar-area')
+            .attr('d', radarLine)
+            .attr('fill-opacity', 0)
+            .attr('stroke-opacity', 0);
+
+        radarPath
+            .transition()
+            .duration(900)
+            .attr('fill-opacity', 1)
+            .attr('stroke-opacity', 1);
+
+        // Dots
+        radarSvg.selectAll('.radar-dot')
+            .data(radarData)
+            .enter()
+            .append('circle')
+            .attr('class', 'radar-dot')
+            .attr('r', 4)
+            .attr('cx', (d,i) =>
+                Math.cos(angleSlice * i - Math.PI/2) * rScale(d.value)
+            )
+            .attr('cy', (d,i) =>
+                Math.sin(angleSlice * i - Math.PI/2) * rScale(d.value)
+            )
+            .style('opacity', 0)
+            .transition()
+            .duration(700)
+            .delay((d,i) => 300 + i*120)
+            .style('opacity', 1);
+
+    });
+</script>
+
+<!-- NEW: Node-link skill network -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const width = 900;
+        const height = 600;
+
+        const svg = d3.select('#learning-svg')
+            .attr('viewBox', `0 0 ${width} ${height}`)
+            .attr('preserveAspectRatio', 'xMidYMid meet');
+
+        const tooltip = document.querySelector('.learning-tooltip');
+
+        const nodes = [
+            { id: 'core',   label: 'Multimedia\nAdvertising Creator', type: 'core',
+              detail: 'My core identity: combining strategy, content, visuals and data.' },
+
+            { id: 'strategy', label: 'Strategy', type: 'cluster',
+              detail: 'Campaign strategy, brand positioning and audience insight.' },
+            { id: 'content',  label: 'Content & Story', type: 'cluster',
+              detail: 'Brand stories, scripts, captions and narrative structure.' },
+            { id: 'visual',   label: 'Visual & Motion', type: 'cluster',
+              detail: 'Photography, video editing and motion for campaigns.' },
+            { id: 'data',     label: 'Data & Tools', type: 'cluster',
+              detail: 'Analytics, data viz and creative tools I use daily.' },
+
+            { id: 'campaign', label: 'Campaign\nPlanning', type: 'leaf',
+              detail: 'Designing objectives, key messages and roll-out plans.' },
+            { id: 'positioning', label: 'Brand\nPositioning', type: 'leaf',
+              detail: 'Defining why a brand matters in people’s lives.' },
+            { id: 'audience', label: 'Audience\nInsight', type: 'leaf',
+              detail: 'Understanding what people need, feel and expect.' },
+
+            { id: 'copy', label: 'Copywriting\n& Slogans', type: 'leaf',
+              detail: 'Writing lines that are clear, emotional and on-brand.' },
+            { id: 'scripts', label: 'Video\nScripts', type: 'leaf',
+              detail: 'Planning scenes and dialogue for short films and ads.' },
+            { id: 'socialCopy', label: 'Social Media\nCaptions', type: 'leaf',
+              detail: 'Short, engaging posts that match platform behaviour.' },
+
+            { id: 'photo', label: 'Photography', type: 'leaf',
+              detail: 'Light, shadow and composition for campaign visuals.' },
+            { id: 'editing', label: 'Video Editing', type: 'leaf',
+              detail: 'Rhythm, cuts and pacing for story and emotion.' },
+            { id: 'layout', label: 'UI & Visual\nLayout', type: 'leaf',
+              detail: 'Simple UI and layout for landing pages and previews.' },
+
+            { id: 'analytics', label: 'Analytics\n& Metrics', type: 'leaf',
+              detail: 'Reading performance data to adjust creative strategy.' },
+            { id: 'dataviz', label: 'Data\nVisualisation', type: 'leaf',
+              detail: 'Turning numbers into clear charts and visual stories.' },
+            { id: 'tools', label: 'Tools:\nAdobe / Figma', type: 'leaf',
+              detail: 'Practical tools: Premiere, Lightroom, Illustrator, Figma, etc.' }
+        ];
+
+        const links = [
+            { source: 'core', target: 'strategy' },
+            { source: 'core', target: 'content' },
+            { source: 'core', target: 'visual' },
+            { source: 'core', target: 'data' },
+
+            { source: 'strategy', target: 'campaign' },
+            { source: 'strategy', target: 'positioning' },
+            { source: 'strategy', target: 'audience' },
+
+            { source: 'content', target: 'copy' },
+            { source: 'content', target: 'scripts' },
+            { source: 'content', target: 'socialCopy' },
+
+            { source: 'visual', target: 'photo' },
+            { source: 'visual', target: 'editing' },
+            { source: 'visual', target: 'layout' },
+
+            { source: 'data', target: 'analytics' },
+            { source: 'data', target: 'dataviz' },
+            { source: 'data', target: 'tools' },
+
+            { source: 'campaign', target: 'copy' },
+            { source: 'campaign', target: 'editing' },
+            { source: 'campaign', target: 'dataviz' },
+
+            { source: 'socialCopy', target: 'analytics' },
+            { source: 'layout', target: 'tools' }
+        ];
+
+        const link = svg.append('g')
+            .attr('stroke-linecap', 'round')
+            .selectAll('line')
+            .data(links)
+            .enter()
+            .append('line')
+            .attr('class', 'skill-link')
+            .attr('stroke-opacity', 0.6);
+
+        const nodeGroup = svg.append('g')
+            .selectAll('g')
+            .data(nodes)
+            .enter()
+            .append('g')
+            .call(d3.drag()
+                .on('start', (event, d) => {
+                    if (!event.active) simulation.alphaTarget(0.3).restart();
+                    d.fx = d.x;
+                    d.fy = d.y;
+                })
+                .on('drag', (event, d) => {
+                    d.fx = event.x;
+                    d.fy = event.y;
+                })
+                .on('end', (event, d) => {
+                    if (!event.active) simulation.alphaTarget(0);
+                    d.fx = null;
+                    d.fy = null;
+                })
+            );
+
+        nodeGroup.append('circle')
+            .attr('r', d => d.type === 'core' ? 28 : d.type === 'cluster' ? 22 : 16)
+            .attr('class', d =>
+                d.type === 'core' ? 'skill-node-core'
+              : d.type === 'cluster' ? 'skill-node-cluster'
+              : 'skill-node-leaf'
+            );
+
+        nodeGroup.append('text')
+            .attr('class', 'skill-label')
+            .attr('text-anchor', 'middle')
+            .selectAll('tspan')
+            .data(d => d.label.split('\n').map(line => ({ id: d.id, line })))
+            .enter()
+            .append('tspan')
+            .attr('x', 0)
+            .attr('dy', (d, i) => i === 0 ? 0 : 13)
+            .text(d => d.line);
+
+        nodeGroup
+            .on('mouseover', (event, d) => {
+                tooltip.style.opacity = '1';
+                tooltip.textContent = d.detail;
+            })
+            .on('mousemove', (event) => {
+                tooltip.style.left = (event.pageX + 12) + 'px';
+                tooltip.style.top  = (event.pageY + 12) + 'px';
+            })
+            .on('mouseout', () => {
+                tooltip.style.opacity = '0';
+            });
+
+        const simulation = d3.forceSimulation(nodes)
+            .force('link', d3.forceLink(links).id(d => d.id).distance(d => {
+                if (d.source.id === 'core' || d.target.id === 'core') return 140;
+                if (d.source.type === 'cluster' || d.target.type === 'cluster') return 110;
+                return 90;
+            }))
+            .force('charge', d3.forceManyBody().strength(-260))
+            .force('center', d3.forceCenter(width / 2, height / 2))
+            .force('collision', d3.forceCollide().radius(d =>
+                d.type === 'core' ? 40 : d.type === 'cluster' ? 34 : 26
+            ))
+            .on('tick', () => {
+                link
+                    .attr('x1', d => d.source.x)
+                    .attr('y1', d => d.source.y)
+                    .attr('x2', d => d.target.x)
+                    .attr('y2', d => d.target.y);
+
+                nodeGroup.attr('transform', d => `translate(${d.x},${d.y})`);
+            });
+    });
+</script>
 
 <!-- Map with filter interaction -->
 <script>
@@ -737,102 +1193,143 @@
     });
 </script>
 
-<!-- Learning diagram tooltip -->
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const nodes = document.querySelectorAll('#learning-svg .main-node, #learning-svg .branch-node');
-        const tooltip = document.querySelector('.learning-tooltip');
-        nodes.forEach(node => {
-            node.addEventListener('mouseover', (e) => {
-                tooltip.style.opacity = '1';
-                tooltip.textContent = node.getAttribute('data-label');
-                tooltip.style.left = `${e.pageX + 10}px`;
-                tooltip.style.top = `${e.pageY + 10}px`;
-            });
-            node.addEventListener('mouseout', () => {
-                tooltip.style.opacity = '0';
-            });
-            node.addEventListener('mousemove', (e) => {
-                tooltip.style.left = `${e.pageX + 10}px`;
-                tooltip.style.top = `${e.pageY + 10}px`;
-            });
-        });
-    });
-</script>
-
-<!-- Matrix -->
+<!-- NEW Matrix: Projects × Skills -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const rowHeaders = [
-            "Children's Painting", "Dancing", "Singing",
-            "Latin Dance", "Sketching", "Watercolor",
-            "Micro-Film (High)", "Sculpture", "Photography",
-            "Music", "Programming", "Computers", "Documentaries", "Micro-Films (College)"
+            "Dyson High-Tech Concept",
+            "Samsung Concept Document",
+            "Lee Kum Kee Campaign Plan",
+            "CanPrev Hya-Love Poster",
+            "Doughnut Backpack Campaign",
+            "Hong Kong Cheongsam Video",
+            "The Story of Clones",
+            "The Beauty of Banyan Trees"
         ];
         const colHeaders = [
-            "Elementary School", "Middle School", "High School", "College"
+            "Campaign Strategy",
+            "Brand Storytelling",
+            "Copywriting",
+            "Social Media",
+            "Video Editing",
+            "Photography",
+            "Data Visualisation",
+            "UI Design"
         ];
-        const matrix = Array(14).fill().map(() => Array(4).fill(0));
+
         const edges = [
-            { from: "Children's Painting",       to: "Elementary School" },
-            { from: "Dancing",                   to: "Elementary School" },
-            { from: "Singing",                   to: "Elementary School" },
-            { from: "Latin Dance",               to: "Middle School" },
-            { from: "Sketching",                 to: "Middle School" },
-            { from: "Watercolor",                to: "Middle School" },
-            { from: "Micro-Film (High)",         to: "High School" },
-            { from: "Sculpture",                 to: "High School" },
-            { from: "Photography",               to: "High School" },
-            { from: "Music",                     to: "College" },
-            { from: "Programming",               to: "College" },
-            { from: "Computers",                 to: "College" },
-            { from: "Documentaries",             to: "College" },
-            { from: "Micro-Films (College)",     to: "College" }
+            // Dyson
+            { project: "Dyson High-Tech Concept",    skill: "Campaign Strategy" },
+            { project: "Dyson High-Tech Concept",    skill: "Brand Storytelling" },
+            { project: "Dyson High-Tech Concept",    skill: "Copywriting" },
+            { project: "Dyson High-Tech Concept",    skill: "UI Design" },
+
+            // Samsung
+            { project: "Samsung Concept Document",   skill: "Campaign Strategy" },
+            { project: "Samsung Concept Document",   skill: "Brand Storytelling" },
+            { project: "Samsung Concept Document",   skill: "Copywriting" },
+            { project: "Samsung Concept Document",   skill: "Data Visualisation" },
+
+            // Lee Kum Kee
+            { project: "Lee Kum Kee Campaign Plan",  skill: "Campaign Strategy" },
+            { project: "Lee Kum Kee Campaign Plan",  skill: "Brand Storytelling" },
+            { project: "Lee Kum Kee Campaign Plan",  skill: "Copywriting" },
+            { project: "Lee Kum Kee Campaign Plan",  skill: "Social Media" },
+            { project: "Lee Kum Kee Campaign Plan",  skill: "Data Visualisation" },
+
+            // CanPrev Hya-Love
+            { project: "CanPrev Hya-Love Poster",    skill: "Brand Storytelling" },
+            { project: "CanPrev Hya-Love Poster",    skill: "Copywriting" },
+            { project: "CanPrev Hya-Love Poster",    skill: "Data Visualisation" },
+            { project: "CanPrev Hya-Love Poster",    skill: "UI Design" },
+
+            // Doughnut
+            { project: "Doughnut Backpack Campaign", skill: "Campaign Strategy" },
+            { project: "Doughnut Backpack Campaign", skill: "Brand Storytelling" },
+            { project: "Doughnut Backpack Campaign", skill: "Social Media" },
+            { project: "Doughnut Backpack Campaign", skill: "Photography" },
+            { project: "Doughnut Backpack Campaign", skill: "UI Design" },
+
+            // Cheongsam video
+            { project: "Hong Kong Cheongsam Video",  skill: "Brand Storytelling" },
+            { project: "Hong Kong Cheongsam Video",  skill: "Copywriting" },
+            { project: "Hong Kong Cheongsam Video",  skill: "Video Editing" },
+            { project: "Hong Kong Cheongsam Video",  skill: "Photography" },
+
+            // Clones short film
+            { project: "The Story of Clones",        skill: "Brand Storytelling" },
+            { project: "The Story of Clones",        skill: "Copywriting" },
+            { project: "The Story of Clones",        skill: "Video Editing" },
+
+            // Banyan documentary
+            { project: "The Beauty of Banyan Trees", skill: "Brand Storytelling" },
+            { project: "The Beauty of Banyan Trees", skill: "Video Editing" },
+            { project: "The Beauty of Banyan Trees", skill: "Photography" },
+            { project: "The Beauty of Banyan Trees", skill: "Data Visualisation" }
         ];
+
+        const rows = rowHeaders.length;
+        const cols = colHeaders.length;
+        const matrix = Array(rows).fill().map(() => Array(cols).fill(0));
+
         edges.forEach(edge => {
-            const i = rowHeaders.indexOf(edge.from);
-            const j = colHeaders.indexOf(edge.to);
-            if (i !== -1 && j !== -1) matrix[i][j] = 1;
+            const i = rowHeaders.indexOf(edge.project);
+            const j = colHeaders.indexOf(edge.skill);
+            if (i !== -1 && j !== -1) {
+                matrix[i][j] = 1;
+            }
         });
 
         const container = document.getElementById('matrix-container');
         const table = document.createElement('table');
         table.id = 'matrix-table';
 
+        // Header row
         const headerRow = document.createElement('tr');
-        headerRow.innerHTML =
-            '<th></th>' +
-            colHeaders.map(node => {
-                let cls = 'main-node';
-                if (node.includes('Elementary')) cls += ' elementary';
-                else if (node.includes('Middle')) cls += ' middle';
-                else if (node.includes('High')) cls += ' high';
-                else if (node.includes('College')) cls += ' college';
-                return `<th class="${cls}">${node}</th>`;
-            }).join('');
+        const corner = document.createElement('th');
+        corner.textContent = '';
+        headerRow.appendChild(corner);
+
+        colHeaders.forEach((colName, j) => {
+            const th = document.createElement('th');
+            th.textContent = colName;
+            th.dataset.colIndex = j;
+            headerRow.appendChild(th);
+        });
         table.appendChild(headerRow);
 
-        rowHeaders.forEach((rowNode, i) => {
+        // Body rows
+        rowHeaders.forEach((rowName, i) => {
             const row = document.createElement('tr');
+
             const rowHeader = document.createElement('th');
             rowHeader.className = 'branch-node';
-            rowHeader.textContent = rowNode;
+            rowHeader.textContent = rowName;
+            rowHeader.dataset.rowIndex = i;
             row.appendChild(rowHeader);
 
-            colHeaders.forEach((colNode, j) => {
+            colHeaders.forEach((colName, j) => {
                 const cell = document.createElement('td');
-                cell.textContent = matrix[i][j];
                 if (matrix[i][j] === 1) {
                     cell.classList.add('connected');
-                    cell.setAttribute('data-tooltip', `${rowNode} → ${colNode}`);
+                    cell.textContent = '1';
+                    cell.setAttribute('data-tooltip', `${rowName} × ${colName}`);
+                    cell.dataset.rowIndex = i;
+                    cell.dataset.colIndex = j;
+                } else {
+                    cell.textContent = '';
                 }
                 row.appendChild(cell);
             });
+
             table.appendChild(row);
         });
+
         container.appendChild(table);
 
         const tooltip = document.querySelector('.matrix-tooltip');
+
+        // Cell tooltips
         document.querySelectorAll('#matrix-table td.connected').forEach(cell => {
             cell.addEventListener('mouseover', (e) => {
                 tooltip.style.opacity = '1';
@@ -846,6 +1343,43 @@
             });
             cell.addEventListener('mouseout', () => {
                 tooltip.style.opacity = '0';
+            });
+        });
+
+        // Row / column highlighting
+        const clearHighlights = () => {
+            table.querySelectorAll('tr').forEach(tr => tr.classList.remove('row-highlight'));
+            table.querySelectorAll('th, td').forEach(td => td.classList.remove('col-highlight'));
+        };
+
+        // Row headers click
+        table.querySelectorAll('th.branch-node').forEach(th => {
+            th.addEventListener('click', () => {
+                const idx = parseInt(th.dataset.rowIndex, 10);
+                const row = table.rows[idx + 1]; // +1 because of header row
+                const isActive = row.classList.contains('row-highlight');
+
+                clearHighlights();
+                if (!isActive) {
+                    row.classList.add('row-highlight');
+                }
+            });
+        });
+
+        // Column headers click
+        table.querySelectorAll('#matrix-table tr:first-child th:not(:first-child)').forEach(th => {
+            th.addEventListener('click', () => {
+                const idx = parseInt(th.dataset.colIndex, 10);
+                const isActive = th.classList.contains('col-highlight');
+
+                clearHighlights();
+                if (!isActive) {
+                    th.classList.add('col-highlight');
+                    for (let r = 1; r < table.rows.length; r++) {
+                        const cell = table.rows[r].cells[idx + 1]; // +1 due to row header
+                        cell.classList.add('col-highlight');
+                    }
+                }
             });
         });
     });
