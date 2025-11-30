@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio: Advertisement Designs, Videos, and Social Media</title>
+    <title>Portfolio: Advertisement Designs, Social Media, Videos, Photography and Comics </title>
+
     <!-- High-Tech Futuristic Style -->
     <style>
-        /* HIGH-TECH FUTURISTIC THEME – Minimal Cyber Luxury */
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Exo+2:wght@300;500;700&display=swap');
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -34,15 +34,13 @@
         nav a {
             color: #00ffff;
             text-decoration: none;
-            margin: 0 1.5rem;
-            font-size: 1.2rem;
+            margin: 0 1.2rem;
+            font-size: 1.1rem;
             text-shadow: 0 0 10px #00ffff;
             transition: color 0.3s;
         }
 
-        nav a:hover {
-            color: #ff00ff;
-        }
+        nav a:hover { color: #ff00ff; }
 
         /* Section Styling */
         section {
@@ -52,7 +50,7 @@
 
         h2 {
             font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
+            font-size: 2.3rem;
             text-align: center;
             color: #00ffff;
             text-shadow: 0 0 20px #00ffff;
@@ -69,15 +67,23 @@
             text-align: center;
         }
 
-        /* Cards Container */
-        .designs-container, .videos-container, .platform-container {
+        /* Cards / Grids */
+        .designs-container,
+        .videos-container,
+        .platform-container,
+        .comics-container,
+        .photography-container {
             display: flex;
             flex-wrap: wrap;
             gap: 2rem;
             justify-content: center;
         }
 
-        .design-card, .video-card, .social-card {
+        .design-card,
+        .video-card,
+        .social-card,
+        .comic-card,
+        .photo-card {
             background: rgba(15, 20, 35, 0.45);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(100, 200, 255, 0.15);
@@ -85,46 +91,51 @@
             padding: 1.5rem;
             width: 300px;
             text-align: center;
-            cursor: pointer;
             transition: all 0.4s;
             box-shadow: 0 10px 30px rgba(0, 100, 200, 0.15);
         }
 
-        .design-card:hover, .video-card:hover, .social-card:hover {
+        .design-card:hover,
+        .video-card:hover,
+        .social-card:hover,
+        .comic-card:hover,
+        .photo-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 20px 50px rgba(0, 255, 255, 0.3);
             border-color: #00ffff;
         }
 
-        .design-card img, .video-card img, .social-card img {
+        .design-card img,
+        .video-card img,
+        .social-card img,
+        .comic-card img,
+        .photo-card img {
             width: 100%;
             border-radius: 10px;
             margin-bottom: 1rem;
             box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
         }
 
-        .design-card .title, .video-card .title, .social-card .title {
+        .title {
             font-size: 1.2rem;
             color: #00ffff;
             text-shadow: 0 0 10px #00ffff;
             margin-bottom: 0.5rem;
         }
 
-        .design-card .description, .video-card .description, .social-card .description {
+        .description {
             font-size: 0.9rem;
             color: #aaa;
             line-height: 1.4;
         }
 
-        /* Modal Styling */
+        /* PDF Modal */
         .modal {
             display: none;
             position: fixed;
             z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
             overflow: auto;
             background-color: rgba(0,0,0,0.8);
             padding-top: 50px;
@@ -140,22 +151,20 @@
             max-width: 1200px;
             border-radius: 15px;
             box-shadow: 0 0 40px rgba(0, 255, 255, 0.3);
+            position: relative;
         }
 
         .close {
             color: #00ffff;
             position: absolute;
-            top: 10px;
-            right: 25px;
+            top: 10px; right: 25px;
             font-size: 35px;
             font-weight: bold;
             cursor: pointer;
             text-shadow: 0 0 10px #00ffff;
         }
 
-        .close:hover {
-            color: #fff;
-        }
+        .close:hover { color: #fff; }
 
         iframe {
             width: 100%;
@@ -164,11 +173,12 @@
             border-radius: 10px;
         }
 
-        /* Scanline Animation */
+        /* Scanline Effect */
         body::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0; height: 2px;
+            top: 0; left: 0; right: 0;
+            height: 2px;
             background: linear-gradient(90deg, transparent, #00ffff, transparent);
             animation: scanline 6s linear infinite;
         }
@@ -181,170 +191,238 @@
 </head>
 <body>
 
-    <nav>
-        <a href="#ad-designs">Advertisement Designs</a>
-        <a href="#videos">Videos</a>
-        <a href="#social-media">Social Media Operations</a>
-    </nav>
+<nav>
+    <a href="#ad-designs">Advertisement Designs</a>
+    <a href="#ad-posters">Advertising Posters</a>
+    <a href="#social-media">Social Media Operations</a>
+    <a href="#videos">Videos</a>
+    <a href="#photography">Photography</a>
+    <a href="#comics">Comic Strips</a>
+</nav>
 
-    <section id="ad-designs">
-        <h2>Advertisement Designs</h2>
-        <div class="designs-container">
-            <!-- Lee Kum Kee Design -->
-            <div class="design-card" onclick="openPdfModal('李錦記廣告設計.pdf')">
-                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/f/fc/Lee_Kum_Kee_logo.svg/1200px-Lee_Kum_Kee_logo.svg.png" alt="Lee Kum Kee Logo">
-                <p class="title">Lee Kum Kee Advertisement Design</p>
-                <p class="description">This design positions Lee Kum Kee as a premium, innovative sauce brand against traditional competitors like Knorr, emphasizing high-end appeal, fusion cuisine, and modern family usage in a competitive market analysis.</p>
-            </div>
+<!-- Advertisement Designs -->
+<section id="ad-designs">
+    <h2>Advertisement Designs</h2>
+    <div class="designs-container">
 
-            <!-- CanPrev Design -->
-            <div class="design-card" onclick="openPdfModal('CanPrev廣告設計.pdf')">
-                <img src="https://bikeforbrainhealth.ca/wp-content/uploads/2024/12/CanPrev_logo_web.jpg" alt="CanPrev Logo">
-                <p class="title">CanPrev Advertisement Design</p>
-                <p class="description">Strategic positioning for CanPrev Collagen Beauty, leveraging VERISOL® clinical trials showing 20% wrinkle reduction in 28 days, professional trust, purity, and superior value in the growing global collagen supplement market.</p>
-            </div>
-
-            <!-- Doughnut Design -->
-            <div class="design-card" onclick="openPdfModal('Doughnut 廣告設計.pdf')">
-                <img src="https://doughnutofficial.us/cdn/shop/files/Doughnut_Logo.jpg?v=1679633993" alt="Doughnut Logo">
-                <p class="title">Doughnut Advertisement Design</p>
-                <p class="description">Campaign for Doughnut backpacks targeting youthful explorers, highlighting functional, multi-environment designs with urban-outdoor fusion, Macaroon series features, and 'Exploration Elevated' theme through dynamic visuals and pre-production strategy.</p>
-            </div>
-
-            <!-- Hya-Love Poster -->
-            <div class="design-card" onclick="openPdfModal('Hya Love post adv v2 (A4 (橫式))_20251008_194649_0000.pdf')">
-                <img src="hya-love-poster.jpg" alt="Hya-Love Poster Preview">
-                <p class="title">Hya-Love Advertisement Poster</p>
-                <p class="description">Hya-Love hyaluronate supplement with Living Silica for superior hydration, helps increase skin moisture, support collagen formation for skin, hair, nails, promote radiant skin, and protect against oxidative damage.</p>
-            </div>
-
-            <!-- Collagen Beauty Powder Poster -->
-            <div class="design-card" onclick="openPdfModal('Collagen Powder Adv 的副本_20251008_171700_0000.pdf')">
-                <img src="collagen-beauty-poster.jpg" alt="Collagen Beauty Poster Preview">
-                <p class="title">Collagen Beauty Powder Advertisement Poster</p>
-                <p class="description">Collagen Beauty Powder with VERISOL patent, clinically proven to reduce wrinkles by 20% in 28 days, stimulates skin fibroblasts, bioactive powder under 2kDa for direct collagen synthesis in skin.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="videos">
-        <h2>Videos</h2>
-        <div class="videos-container">
-            <!-- Hong Kong Cheongsam -->
-            <div class="video-card" onclick="openVideoModal('h5OofwyICE8')">
-                <img src="https://img.youtube.com/vi/h5OofwyICE8/0.jpg" alt="Hong Kong Cheongsam Preview">
-                <p class="title">Hong Kong Cheongsam</p>
-                <p class="description">This engaging interview features industry experts discussing innovative trends, personal experiences, and future insights in technology and creativity, offering viewers a 15-minute deep dive into emerging topics and inspirations.</p>
-            </div>
-
-            <!-- The Story of Clones -->
-            <div class="video-card" onclick="openVideoModal('t9cexMV3OlA')">
-                <img src="https://img.youtube.com/vi/t9cexMV3OlA/0.jpg" alt="The Story of Clones Preview">
-                <p class="title">The Story of Clones</p>
-                <p class="description">A captivating short film exploring themes of adventure and self-discovery through stunning visuals and a compelling narrative, blending urban life with outdoor exploration in an 8-minute cinematic experience.</p>
-            </div>
-
-            <!-- The Beauty of Banyan Trees -->
-            <div class="video-card" onclick="openVideoModal('8gFXyEMqOoA')">
-                <img src="https://img.youtube.com/vi/8gFXyEMqOoA/0.jpg" alt="The Beauty of Banyan Trees Preview">
-                <p class="title">The Beauty of Banyan Trees</p>
-                <p class="description">This educational documentary delves into the world of plants, covering growth cycles, ecological importance, and human interactions, with beautiful footage and expert commentary in a 20-minute informative presentation.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="social-media">
-        <h2>Social Media Operations</h2>
-        
-        <h3>Instagram Accounts</h3>
-        <div class="platform-container">
-            <!-- Brain Best IG -->
-            <div class="social-card" onclick="openLink('https://www.instagram.com/brainbestbrain/')">
-                <img src="brain-profile.jpg" alt="Brain Best Logo">
-                <p class="title">Brain Best (Instagram)</p>
-                <p class="description">Managed Instagram account focused on brain health and cognitive enhancement, featuring short educational videos on memory techniques, environmental education, and mental wellness tips for all ages.</p>
-            </div>
-
-            <!-- Sustainable Family IG -->
-            <div class="social-card" onclick="openLink('https://www.instagram.com/info_sfamily/')">
-                <img src="family-profile.jpg" alt="Sustainable Family Logo">
-                <p class="title">Sustainable Family Cultural Festival (Instagram)</p>
-                <p class="description">Instagram account promoting sustainable family living and cultural festivals, sharing parent-child activities, environmental education, and SDG-focused events to connect families with eco-friendly practices and cultural values.</p>
-            </div>
+        <div class="design-card" onclick="openPdfModal('李錦記廣告設計.pdf')">
+            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/f/fc/Lee_Kum_Kee_logo.svg/1200px-Lee_Kum_Kee_logo.svg.png" alt="Lee Kum Kee logo">
+            <p class="title">Lee Kum Kee Advertisement Design</p>
+            <p class="description">Premium sauce brand positioning, insight-based campaign direction.</p>
         </div>
 
-        <h3>YouTube Channels</h3>
-        <div class="platform-container">
-            <!-- Data Beauty YouTube -->
-            <div class="social-card" onclick="openLink('https://youtube.com/channel/UCsWD06peG7iINMmiLU6f4Zg?si=KUnHJt2llKwW08Si')">
-                <img src="data-beauty-profile.jpg" alt="Data Beauty Logo">
-                <p class="title">肌密教室 Data Beauty (YouTube)</p>
-                <p class="description">YouTube channel exploring beauty through data analysis, revealing skincare secrets and product effectiveness with scientific insights and educational content on cosmetics and wellness.</p>
-            </div>
-
-            <!-- Brain Best YouTube -->
-            <div class="social-card" onclick="openLink('https://www.youtube.com/@brainbestbrain')">
-                <img src="brain-best-youtube-profile.jpg" alt="Brain Best YouTube Logo">
-                <p class="title">腦Best (YouTube)</p>
-                <p class="description">YouTube channel on brain health, offering tips on memory, learning, and cognitive enhancement through scientific methods, with videos on neuroscience and mental wellness strategies.</p>
-            </div>
+        <div class="design-card" onclick="openPdfModal('CanPrev廣告設計.pdf')">
+            <img src="https://bikeforbrainhealth.ca/wp-content/uploads/2024/12/CanPrev_logo_web.jpg" alt="CanPrev logo">
+            <p class="title">CanPrev Advertisement Design</p>
+            <p class="description">Collagen Beauty strategic positioning using VERISOL® clinical trials.</p>
         </div>
-    </section>
 
-    <!-- Modal for PDF Viewer -->
-    <div id="pdfModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closePdfModal()">&times;</span>
-            <iframe id="pdfFrame"></iframe>
+        <div class="design-card" onclick="openPdfModal('Doughnut 廣告設計.pdf')">
+            <img src="https://doughnutofficial.us/cdn/shop/files/Doughnut_Logo.jpg?v=1679633993" alt="Doughnut Backpack logo">
+            <p class="title">Doughnut Backpack Campaign</p>
+            <p class="description">Urban-outdoor fusion, Macaroon series creative direction.</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- Advertising Posters (separate category) -->
+<section id="ad-posters">
+    <h2>Advertising Posters</h2>
+    <div class="designs-container">
+
+        <div class="design-card" onclick="openPdfModal('Hya Love post adv v2 (A4 (橫式))_20251008_194649_0000.pdf')">
+            <img src="Hya Love.png" alt="Hya-Love Poster">
+            <p class="title">Hya-Love Poster</p>
+            <p class="description">Hydration, collagen formation, and beauty supplement positioning.</p>
+        </div>
+
+        <div class="design-card" onclick="openPdfModal('Collagen Powder Adv 的副本_20251008_171700_0000.pdf')">
+            <img src="Collagen Powder .png" alt="Collagen Beauty Powder Poster">
+            <p class="title">Collagen Beauty Powder Poster</p>
+            <p class="description">VERISOL bioactive collagen, wrinkle reduction insights.</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- Social Media Operations -->
+<section id="social-media">
+    <h2>Social Media Operations</h2>
+
+    <h3>Instagram Accounts</h3>
+    <div class="platform-container">
+        <div class="social-card" onclick="openLink('https://www.instagram.com/brainbestbrain/')">
+            <img src="brain-profile.jpg" alt="Brain Best Instagram profile">
+            <p class="title">Brain Best (Instagram)</p>
+            <p class="description">Educational content on brain health and cognitive enhancement.</p>
+        </div>
+
+        <div class="social-card" onclick="openLink('https://www.instagram.com/info_sfamily/')">
+            <img src="family-profile.jpg" alt="Sustainable Family Festival Instagram profile">
+            <p class="title">Sustainable Family Festival</p>
+            <p class="description">Eco-friendly parenting and SDG event social media operation.</p>
         </div>
     </div>
 
-    <!-- Modal for Video Viewer -->
-    <div id="videoModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeVideoModal()">&times;</span>
-            <iframe id="videoFrame" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <h3>YouTube Channels</h3>
+    <div class="platform-container">
+        <div class="social-card" onclick="openLink('https://youtube.com/channel/UCsWD06peG7iINMmiLU6f4Zg')">
+            <img src="data beauty.png" alt="Data Beauty YouTube profile">
+            <p class="title">Data Beauty (YouTube)</p>
+            <p class="description">Beauty analysis through data and scientific storytelling.</p>
+        </div>
+
+        <div class="social-card" onclick="openLink('https://www.youtube.com/@brainbestbrain')">
+            <img src="Brian best.png" alt="Brain Best YouTube profile">
+            <p class="title">Brain Best (YouTube)</p>
+            <p class="description">Neuroscience, memory, learning and cognitive performance.</p>
         </div>
     </div>
+</section>
 
-    <script>
-        // PDF Modal Functions
-        function openPdfModal(pdfFile) {
-            document.getElementById('pdfFrame').src = pdfFile;
-            document.getElementById('pdfModal').style.display = "block";
-        }
+<!-- PDF Modal -->
+<div id="pdfModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closePdfModal()">&times;</span>
+        <iframe id="pdfFrame"></iframe>
+    </div>
+</div>
 
-        function closePdfModal() {
-            document.getElementById('pdfModal').style.display = "none";
-            document.getElementById('pdfFrame').src = "";
-        }
+<script>
+    function openPdfModal(pdfFile) {
+        document.getElementById('pdfFrame').src = pdfFile;
+        document.getElementById('pdfModal').style.display = "block";
+    }
 
-        // Video Modal Functions
-        function openVideoModal(videoId) {
-            document.getElementById('videoFrame').src = `https://www.youtube.com/embed/${videoId}`;
-            document.getElementById('videoModal').style.display = "block";
-        }
+    function closePdfModal() {
+        document.getElementById('pdfModal').style.display = "none";
+        document.getElementById('pdfFrame').src = "";
+    }
 
-        function closeVideoModal() {
-            document.getElementById('videoModal').style.display = "none";
-            document.getElementById('videoFrame').src = "";
-        }
+    function openLink(url) {
+        window.open(url, '_blank');
+    }
 
-        // Open Link in New Tab
-        function openLink(url) {
-            window.open(url, '_blank');
+    window.onclick = function(event) {
+        if (event.target === document.getElementById('pdfModal')) {
+            closePdfModal();
         }
+    }
+</script>
 
-        // Close modals if clicked outside
-        window.onclick = function(event) {
-            if (event.target == document.getElementById('pdfModal')) {
-                closePdfModal();
-            }
-            if (event.target == document.getElementById('videoModal')) {
-                closeVideoModal();
-            }
-        }
-    </script>
+<!-- Videos Section -->
+<section id="videos">
+    <h2>Videos</h2>
+    <div class="videos-container">
+
+        <div class="video-card" onclick="openLink('https://youtu.be/h5OofwyICE8')">
+            <img src="https://img.youtube.com/vi/h5OofwyICE8/0.jpg" alt="Hong Kong Cheongsam video thumbnail">
+            <p class="title">Hong Kong Cheongsam</p>
+            <p class="description">Feature interview video highlighting Hong Kong cheongsam stories and culture.</p>
+        </div>
+
+        <div class="video-card" onclick="openLink('https://youtu.be/pHHzlNDQ3n0?si=y2LTAnNz-rhAnYGC')">
+            <img src="https://img.youtube.com/vi/pHHzlNDQ3n0/0.jpg" alt="The Story of Clones video thumbnail">
+            <p class="title">The Story of Clones</p>
+            <p class="description">Short film exploring identity and narrative creativity.</p>
+        </div>
+
+        <div class="video-card" onclick="openLink('https://youtu.be/8gFXyEMqOoA')">
+            <img src="https://img.youtube.com/vi/8gFXyEMqOoA/0.jpg" alt="The Beauty of Banyan Trees video thumbnail">
+            <p class="title">The Beauty of Banyan Trees</p>
+            <p class="description">Documentary on Hong Kong banyan ecology and visual storytelling.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Photography Section -->
+<section id="photography">
+    <h2>Photography</h2>
+    <div class="photography-container">
+
+        <div class="photo-card">
+            <img src="photo_reflection_lake.jpg" alt="Tree reflections by the lake">
+            <p class="title">Silent Reflections</p>
+            <p class="description">
+                Bare winter branches and full leafy trees mirror on still water, capturing a calm contrast between seasons and the quiet rhythm of time passing.
+            </p>
+        </div>
+
+        <div class="photo-card">
+            <img src="photo_sunset_harbour.jpg" alt="Four sunset harbour scenes">
+            <p class="title">Four Skies, One Sea</p>
+            <p class="description">
+                A series of harbour sunsets, each sky painted in different colours, showing shifting light over the same water as boats and citylines slowly fade.
+            </p>
+        </div>
+
+        <div class="photo-card">
+            <img src="photo_city_diary.jpg" alt="Nine-frame city diary collage">
+            <p class="title">City Fragments</p>
+            <p class="description">
+                Nine small moments from the street: shadows, alleys, flowers, motion blur and windows, forming a visual diary of quiet corners inside everyday urban life.
+            </p>
+        </div>
+
+        <div class="photo-card">
+            <img src="photo_urban_contrast.jpg" alt="Urban contrast collage">
+            <p class="title">Urban Contrast</p>
+            <p class="description">
+                Paths, buildings and structures appear in strong sunlight and deep shadow, combining playful animals, signage and colourful apartments to show layered textures of the city environment.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+<!-- Comic Strips Section -->
+<section id="comics">
+    <h2>Comic Strips</h2>
+    <div class="comics-container">
+
+        <div class="comic-card">
+            <img src="第一話：家姐們的早晨大戰.png" alt="第一話：家姐們的早晨大戰">
+            <p class="title">第一話：家姐們的早晨大戰</p>
+            <p class="description">
+                A busy breakfast scene where siblings argue over food, parents react in shock, and the calm second sister quietly takes control in front of the whole family at home there.
+            </p>
+        </div>
+
+        <div class="comic-card">
+            <img src="第二話：爺爺的秘密招數.png" alt="第二話：爺爺的秘密招數">
+            <p class="title">第二話：爺爺的秘密招數</p>
+            <p class="description">
+                A granddaughter complains to her grandpa, who secretly teaches her a clever plan. She prepares snacks and a small note, and her father finally softens and praises her warmly, gently.
+            </p>
+        </div>
+
+        <div class="comic-card">
+            <img src="第三話：細佬的求救信號.png" alt="第三話：細佬的求救信號">
+            <p class="title">第三話：細佬的求救信號</p>
+            <p class="description">
+                The younger brother is forced into a pink dress, begging the second sister to save him. She negotiates, then helps him escape while everyone is distracted and laughing happily together.
+            </p>
+        </div>
+
+        <div class="comic-card">
+            <img src="第四話：嫲嫲的美食陷阱.png" alt="第四話：嫲嫲的美食陷阱">
+            <p class="title">第四話：嫲嫲的美食陷阱</p>
+            <p class="description">
+                Grandma bakes fresh egg tarts while the girl waits impatiently. They bargain playfully over washing dishes, and the younger sister happily enjoys the dessert as grandma smiles in satisfaction nearby.
+            </p>
+        </div>
+
+        <div class="comic-card">
+            <img src="第五話：爸爸的奇怪補償.png" alt="第五話：爸爸的奇怪補償">
+            <p class="title">第五話：爸爸的奇怪補償</p>
+            <p class="description">
+                The daughter confronts her busy father for ignoring her. He offers a teddy bear with a promise note, but she insists that true companionship cannot be replaced by material gifts.
+            </p>
+        </div>
+
+    </div>
+</section>
 
 </body>
 </html>

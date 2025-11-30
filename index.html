@@ -393,11 +393,13 @@
         <div id="hobbies-scatterplot"></div>
     </section>
 
+    <!-- UPDATED PIE SECTION: Advertising skills instead of favorite foods -->
     <section id="pie-section" class="reveal">
-        <h2>Favorite Foods Distribution (Playful Pie Chart)</h2>
+        <h2>My Advertising Skills (Pie Chart)</h2>
         <p class="section-intro">
-            A playful example of how I encode preferences into data. The pie chart uses clear labelling and simple
-            colours instead of 3D effects, following the “function before form” rule. Hover a slice to see it pop out slightly.
+            This pie chart shows how I distribute my creative
+            energy across key <strong>advertising skills</strong> — from brand storytelling and social media content
+            to video editing, photography, and UI / visual design.
         </p>
         <svg id="pie-chart" width="500" height="500"></svg>
         <div id="pie-legend"></div>
@@ -412,29 +414,7 @@
         </p>
     </section>
 
-    <section id="travel-map" class="reveal">
-        <h2 class="section-title-center">
-            My Journey: Places I've Visited (Map)
-        </h2>
-        <p class="section-intro">
-            The map encodes <strong>travel type</strong> with colour (attended / lived, family travel,
-            personal adventure). Click the legend items to filter types, and hover dots for details.
-        </p>
-        <div id="map"></div>
-        <div class="legend">
-            <h4>Travel Type (click to filter)</h4>
-            <div class="legend-item" data-category="attended">
-                <div class="legend-dot purple"></div><span>Attended / Lived</span>
-            </div>
-            <div class="legend-item" data-category="family">
-                <div class="legend-dot blue"></div><span>Family Travel</span>
-            </div>
-            <div class="legend-item" data-category="adventure">
-                <div class="legend-dot red"></div><span>Personal Adventure</span>
-            </div>
-        </div>
-    </section>
-
+    
     <section id="learning-experience" class="reveal">
         <h2>Learning Experience (Node-Link Overview)</h2>
         <p class="section-intro">
@@ -563,63 +543,76 @@
 <!-- Scripts -->
 <script src="scatterplot_animation.js"></script>
 
-<!-- Pie chart with hover effect -->
+<!-- Pie chart for Advertising Skills -->
 <script>
-    document.addEventListener('DOMContentLoaded',()=>{
+    document.addEventListener('DOMContentLoaded', () => {
         const data = [
-            {label:'Hot Pot',   value:35},
-            {label:'Barbecue',  value:25},
-            {label:'Burgers',   value:20},
-            {label:'Pizza',     value:10},
-            {label:'Sushi',     value:10}
+            { label: 'Brand Storytelling',   value: 32 },
+            { label: 'Social Media Content', value: 25 },
+            { label: 'Video Editing',        value: 18 },
+            { label: 'Photography',          value: 15 },
+            { label: 'UI / Visual Design',   value: 10 }
         ];
+
         const colors = d3.scaleOrdinal()
-            .domain(data.map(d=>d.label))
-            .range(['#FF5733','#36A2EB','#FFC300','#4CAF50','#9966FF']);
+            .domain(data.map(d => d.label))
+            .range(['#00FFFF', '#FF00FF', '#4CAF50', '#FFC300', '#9966FF']);
 
-        const w = 500, h = 500, r = Math.min(w,h)/2;
+        const w = 500, h = 500, r = Math.min(w, h) / 2;
         const svg = d3.select('#pie-chart')
-            .attr('width',w).attr('height',h)
+            .attr('width', w)
+            .attr('height', h)
             .append('g')
-            .attr('transform',`translate(${w/2},${h/2})`);
+            .attr('transform', `translate(${w / 2}, ${h / 2})`);
 
-        const pie = d3.pie().sort(null).value(d=>d.value);
+        const pie = d3.pie().sort(null).value(d => d.value);
         const arc = d3.arc().innerRadius(0).outerRadius(r);
         const arcHover = d3.arc().innerRadius(0).outerRadius(r + 10);
 
         const arcs = svg.selectAll('.arc')
             .data(pie(data))
-            .enter().append('g')
-            .attr('class','arc');
+            .enter()
+            .append('g')
+            .attr('class', 'arc');
 
         arcs.append('path')
-            .attr('d',arc)
-            .attr('fill',d=>colors(d.data.label))
-            .on('mouseover', function(event, d) {
-                d3.select(this).transition().duration(150).attr('d', arcHover);
+            .attr('d', arc)
+            .attr('fill', d => colors(d.data.label))
+            .on('mouseover', function () {
+                d3.select(this)
+                    .transition()
+                    .duration(150)
+                    .attr('d', arcHover);
             })
-            .on('mouseout', function(event, d) {
-                d3.select(this).transition().duration(150).attr('d', arc);
+            .on('mouseout', function () {
+                d3.select(this)
+                    .transition()
+                    .duration(150)
+                    .attr('d', arc);
             });
 
         arcs.append('text')
-            .attr('transform',d=>`translate(${arc.centroid(d)})`)
-            .attr('dy','.35em')
-            .style('text-anchor','middle')
-            .style('font-size','12px')
-            .style('fill','white')
-            .style('font-weight','bold')
-            .text(d=>`${d.data.value.toFixed(1)}%`);
+            .attr('transform', d => `translate(${arc.centroid(d)})`)
+            .attr('dy', '.35em')
+            .style('text-anchor', 'middle')
+            .style('font-size', '12px')
+            .style('fill', 'white')
+            .style('font-weight', 'bold')
+            .text(d => `${d.data.value}%`);
 
         const legend = d3.select('#pie-legend');
         const items = legend.selectAll('.legend-item')
-            .data(data).enter()
-            .append('div').attr('class','legend-item');
+            .data(data)
+            .enter()
+            .append('div')
+            .attr('class', 'legend-item');
+
         items.append('div')
-            .attr('class','color')
-            .style('background-color',d=>colors(d.label));
+            .attr('class', 'color')
+            .style('background-color', d => colors(d.label));
+
         items.append('span')
-            .text(d=>`${d.label} (${d.value.toFixed(1)}%)`);
+            .text(d => `${d.label} (${d.value}%)`);
     });
 </script>
 
@@ -898,7 +891,7 @@
         window.addEventListener('scroll', onScroll);
         onScroll();
 
-        // Smooth scroll for nav links (保证所有浏览器都可以）
+        // Smooth scroll for nav links
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 const href = link.getAttribute('href');
@@ -920,7 +913,7 @@
             cvSection.style.maxHeight = '0';
             cvSection.style.overflow = 'hidden';
             cvSection.style.opacity = '0';
-            cvSection.classList.remove('visible'); // reveal动画由 JS 控制
+            cvSection.classList.remove('visible');
             cvButton.addEventListener('click', (e) => {
                 e.preventDefault();
                 cvVisible = !cvVisible;
